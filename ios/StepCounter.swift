@@ -7,17 +7,18 @@
 
 import Foundation
 import CoreMotion
-import <React/RCTRootView.h>
+import React
 
+@objc(StepCounter)
 class StepCounter: RCTEventEmitter {
     
     private let pedometer = CMPedometer()
 
-     static func requiresMainQueueSetup() -> Bool {
+    override static func requiresMainQueueSetup() -> Bool {
         return true
     }
 
-     func supportedEvents() -> [String]! {
+  override  func supportedEvents() -> [String]! {
         return ["StepCount"]
     }
 
@@ -69,11 +70,11 @@ class StepCounter: RCTEventEmitter {
     }
 
     private func sendStepsToReactNative(steps: Int) {
-      self.sendEvent(withName: "StepCount", body: ["steps": steps])
-//        DispatchQueue.main.async {
-//          self.sendEvent(withName: "StepCount", body: ["steps": steps])
-////            self.sendEvent(withName: "StepCount", body: ["steps": steps])
-//        }
+//      self.sendEvent(withName: "StepCount", body: ["steps": steps])
+        DispatchQueue.main.async {
+          self.sendEvent(withName: "StepCount", body: ["steps": steps])
+//            self.sendEvent(withName: "StepCount", body: ["steps": steps])
+        }
     }
 }
 

@@ -1,0 +1,12 @@
+export { default as GenderScreen } from "./Gender";
+export { default as AgeScreen } from "./Age";
+export { default as WeightScreen } from "./Weight";
+export { default as HeightScreen } from "./Height";
+export { default as ActivityLevelScreen } from "./ActivityLevel";
+export { default as WeightTrainScreen } from "./WeightTrain";
+export { default as GymGoalScreen } from "./GymGoal";
+export { default as GymPlaceScreen } from "./GymPlace";
+export { default as ProgramScreen } from "./Program";
+export { default as PlanScreen } from "./Plan";
+export { default as PaymentScreen } from "./Payment";
+export { default as YooMoneyCheckoutFormScreen } from "./YooMoneyCheckoutForm"
