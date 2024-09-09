@@ -33,6 +33,8 @@ import { SettingsScreen } from "../screens/settings";
 import { StepCounterScreen } from "../screens/StepCounter";
 import MyTabs from './topTabBar'
 import StatsTopTabBar from './statsTopTabBar'
+import UserLeaderBoard from "../screens/stats/UserLeaderBoard";
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 const Nav = createBottomTabNavigator();
 
@@ -93,14 +95,15 @@ const NavigationScreens = () => {
             color = focused ? "#6842FF" : "#A8A8A8";
             label = "Step Counter";
           } else if (route.name === "StatsScreen") {
-            Icon = focused ? ChartFilled : ChartOutline;
+            Icon = () => <MaterialIcon name="leaderboard" color={focused ? "#6842FF" : "#A8A8A8"} size={18} />;
             color = focused ? "#6842FF" : "#A8A8A8";
-            label = "Stats";
+            label = "Leader Board";
           } else if (route.name === "SettingsScreen") {
             Icon = focused ? SettingsFilled : SettingsOutline;
             color = focused ? "#6842FF" : "#A8A8A8";
             label = "Settings";
           }
+          console.log("Icon type is:#@#@",Icon)
           return (
             <View
               style={{
@@ -111,7 +114,7 @@ const NavigationScreens = () => {
                 borderTopColor: "transparent",
               }}
             >
-              <Icon size={24} color={color} />
+              {label.includes("Leader") ? <Icon/> : <Icon size={24} color={color} />}
               <Text style={[styles.label, { color: color }]}>{label}</Text>
             </View>
           );
@@ -156,7 +159,7 @@ const NavigationScreens = () => {
       /> */}
       <Nav.Screen
         name="StatsScreen"
-        component={StatsTopTabBar}
+        component={UserLeaderBoard}
         options={{
           headerTitle: () => null,
           headerLeft: () => {
@@ -167,7 +170,7 @@ const NavigationScreens = () => {
                   style={styles.favicon}
                   resizeMode="cover"
                 />
-                <Text style={[styles.title]}>Stats</Text>
+                <Text style={[styles.title]}>Leader Board</Text>
               </View>
             );
           },

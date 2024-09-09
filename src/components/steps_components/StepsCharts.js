@@ -93,17 +93,6 @@ const StepsCharts = ({ distance,unite, additionalInfo,heading }) => {
         {renderInnerCircle(unite)}
       </View>
       </View>
-      {/* <View style={styles.iconContainer}>
-      
-        <View style={styles.icon}>
-        <Icon name="fire" size={30} color="#FF6347" />
-        <View style={{position:'absolute',
-        width: '100%',
-     height: '50%',
-     backgroundColor:'#121212',
-    bottom: 0,}}/>
-        </View>
-      </View> */}
       <View style={{position:'absolute',bottom:10,right:5}}>
       <Text style={styles.additionalInfo}>
       <FlagIcon name="flag" size={10} color="#ff6347" />

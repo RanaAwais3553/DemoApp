@@ -106,7 +106,7 @@ const Signup = ({ navigation }) => {
       try {
         const caseSensitiveEmail = values.email.toLowerCase();
         const newValues = {...values, email: caseSensitiveEmail, password: values.password }
-        console.log("mutation")
+        console.log("mutation",newValues)
         mutateAsync(newValues);
         setIsLoading(false);
       } catch (error) {
@@ -131,6 +131,7 @@ const Signup = ({ navigation }) => {
   };
 
   useEffect(() => {
+    console.log("error status is:#@#@",isError)
     if (isSuccess) {
       setIsModalShown(true);
     } else if (isError) {
@@ -140,7 +141,10 @@ const Signup = ({ navigation }) => {
         Alert.alert("Registration Failed!", "Email is already registered!", [
           {
             text: "OK",
-            onPress: () => formik.setStatus("Email is already registered"),
+            onPress: () => {
+              formik.setStatus("Email is already registered");
+              formik.setErrors(false)
+            },
           },
         ]);
       }

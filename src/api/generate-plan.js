@@ -1,4 +1,5 @@
 import axios from "axios";
+import { CloudCog } from "lucide-react-native";
 
 const API_BASE = process.env.EXPO_PUBLIC_API_URL;
 
@@ -31,7 +32,7 @@ const GeneratePlan = async (params) => {
       "Content-Type": "application/json", // Set the content type to JSON
     },
   });
-
+  console.log("while genberating workout plan:#@#@#",res)
   return res.data;
 };
 

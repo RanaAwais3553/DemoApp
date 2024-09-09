@@ -10,6 +10,7 @@ const Axios = axios.create({
 const UserUpdate = async (params) => {
   console.log("user updated data:#@#@#@",params)
   const res = await Axios.put("/users/update", params);
+  console.log("user updated data after API call:#@#@#@",res)
   return res.data;
 };
 

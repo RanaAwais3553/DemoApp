@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { LineChart, Grid } from 'react-native-svg-charts';
 import * as shape from 'd3-shape';
 
-const WaveChart = () => {
+const WaveChart = ({currentDay}) => {
     const data = [50, 10, 40, 65, 35, 91, 35]; // Sample data points for the wave
 
     return (
@@ -18,10 +18,10 @@ const WaveChart = () => {
                 <Grid />
             </LineChart>
             <View style={styles.dayLabels}>
-                {['MON', 'TUE', 'WED', 'THR', 'FRI', 'SAT', 'SUN'].map((day, index) => (
+                {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map((day, index) => (
                     <Text
                         key={index}
-                        style={[styles.dayLabel, index === 6 && styles.currentDay]}
+                        style={[styles.dayLabel, currentDay?.toLowerCase().startsWith(day?.toLowerCase()) && styles.currentDay]}
                     >
                         {day}
                     </Text>

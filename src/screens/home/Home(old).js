@@ -25,7 +25,7 @@ import moment from "moment";
 
 import { SignupSuccess, ArrowRight } from "../../components/icons";
 
-import BannerImage2 from "../../components/image/banner.jpg";
+// import BannerImage2 from "../../components/image/banner.jpg";
 import BannerImage from "../../components/image/excercise/Photo_Cardio_ee.png";
 import a from "../../components/image/excercise/001.jpg";
 /*import ExcerciseImage_1 from "../../components/image/excercise/001.jpg";

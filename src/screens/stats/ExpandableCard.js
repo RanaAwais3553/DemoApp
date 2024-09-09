@@ -10,7 +10,7 @@ const ExpandableUserCard = ({ user }) => {
       <Image source={{ uri: user.image }} style={styles.userImage} />
       <View style={styles.userInfo}>
         <Text style={styles.userName}>{user.name}</Text>
-        <Text style={styles.userScore}>Score: {user.score}</Text>
+        <Text style={styles.userScore}>FootSteps: {user.score}</Text>
       </View>
     </View>
   );

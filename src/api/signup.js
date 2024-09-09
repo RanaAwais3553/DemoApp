@@ -7,7 +7,7 @@ const Axios = axios.create({
 });
 
 const Signup = async (params) => {
-  console.log("API_BASE",API_BASE,process.env.EXPO_PUBLIC_API_URL,EXPO_PUBLIC_API_URL)
+  console.log("API_BASE in signup.js",API_BASE,process.env.EXPO_PUBLIC_API_URL,EXPO_PUBLIC_API_URL,params)
   const res = await Axios.post("/users/new", params);
   return res.data;
 };

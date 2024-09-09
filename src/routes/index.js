@@ -28,6 +28,7 @@ const Routes = () => {
 
   return (
     <Page.Navigator
+    initialRouteName="WelcomeScreen"
       screenOptions={{
         gestureEnabled: false,
         headerShown: false,

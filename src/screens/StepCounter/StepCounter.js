@@ -6,7 +6,8 @@ import {
   Dimensions,
   ScrollView,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  AppState
 } from "react-native";
 import React, { useState, useEffect } from "react";
 // import { Pedometer } from 'expo-sensors';
@@ -16,7 +17,6 @@ import React, { useState, useEffect } from "react";
 //   startStepCounterUpdate,
 //   stopStepCounterUpdate,
 // } from 'react-native-step-counter';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   LineChart,
   BarChart,
@@ -37,16 +37,14 @@ import {
   Steps
 } from "../../components/icons";
 import StepsCharts from '../../components/steps_components/StepsCharts'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from "@react-navigation/native";
 // import { startStepCounting, stopStepCounting, subscribeToStepCount, unsubscribeFromStepCount } from '../../module/StepCounterModule';
 let dailyTargetedSteps = 810;
 const StepCounter = () => {
   const [stepCount, setStepCount] = useState(0);
   const [stepType,setStepType] = useState(1);
   const [previousStepCount, setPreviousStepCount] = useState(0);
-
-  const [steps, setSteps] = useState(0);
-  const [subscription, setSubscription] = useState(null);
-
 
 //   useEffect(() => {
 //     startStepCounting();
