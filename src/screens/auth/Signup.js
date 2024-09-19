@@ -35,7 +35,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ArrowRight } from "lucide-react-native";
 import {EXPO_PUBLIC_API_URL} from '@env'
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 const SSO_btn = [
   { name: "facebook", icon: Facebook },
   { name: "google", icon: Google },
@@ -158,7 +158,7 @@ const Signup = ({ navigation }) => {
       style={{ backgroundColor: "#ffffff", flex: 1, position: "relative" }}
       edges={["right", "left", "bottom"]}
     >
-      <ScrollView
+      {/* <ScrollView
         contentContainerStyle={{
           flexGrow: 1,
           justifyContent: "center",
@@ -169,7 +169,8 @@ const Signup = ({ navigation }) => {
         decelerationRate="normal"
         showsVerticalScrollIndicator={false}
         scrollEnabled={isKeyboardShown}
-      >
+      > */}
+       <KeyboardAwareScrollView style={{paddingTop:22}} bounces={false} showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <View style={styles.box}>
             <Text label="Create your Account" size="xl_6" font="bold" />
@@ -279,7 +280,9 @@ const Signup = ({ navigation }) => {
             )}
           </View>
         </View>
-      </ScrollView>
+        </KeyboardAwareScrollView>
+      {/* </ScrollView> */}
+
       <View style={styles.footer}>
         <Text
           label={"Already have an account? "}

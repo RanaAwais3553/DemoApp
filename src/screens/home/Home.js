@@ -21,10 +21,6 @@ import { Button, Text } from "../../components/ui";
 import moment from "moment";
 import { SignupSuccess } from "../../components/icons";
 import Icon from 'react-native-vector-icons/FontAwesome';
-//import BannerImage from "../../components/image/excercise/Photo_Cardio_ee.png";
-import BannerImage from "../../components/image/beach_header_image.png";
-import ExcerciseImage_1 from "../../components/image/excercise/photo_legs_ii.png";
-//import ExcerciseImage_1b from "../../components/image/excercise/photo_pull_b.png";
 import { ArrowRight, CloudCog } from "lucide-react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -42,7 +38,7 @@ const Banner = ({ week, day, excercise }) => {
   return (
     <View style={styles.banner.imgContainer}>
       <ImageBackground
-        source={require('../../components/image/beach_header_image.png')}
+        source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/beach_header_image.png'}}
         style={styles.banner.image}
         imageStyle={styles.banner.imageStyle}
       >
@@ -102,7 +98,7 @@ const Card = ({ user, day, exercises, image, onPress }) => {
 <Image source={require('./../../../assets/doneMark.jpeg')} style={{height:40,width:40,resizeMode:'contain'}}/>
       </View> */}
       <ImageBackground
-        source={image}
+        source={{uri:image}}
         style={styles.card.image}
         imageStyle={day + 1 == 1 ?  styles.card.imageStyle : styles.card.imageStyleNotCompleted}
       >
@@ -187,13 +183,41 @@ const [setToggleState,toggleState] = useState({day1:false,day2:true,day3:false})
 
   useEffect(() => {
     // Import all images from the exercise directory dynamically
-    const importAll = (r) => r.keys().map(r);
-    const images = importAll(
-      require.context("../../components/image/excercise", false, /\.(png|jpg)$/)
-    );
+    const imagesArray = [
+      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/001.jpg",
+      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/002.jpg",
+      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/003.jpg",
+      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/004.jpg",
+      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/005.jpg",
+      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/006.jpg",
+      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/007.jpg",
+      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3854.jpg",
+      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3856.jpg",
+      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3858.jpg",
+      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3862.jpg",
+      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3866.jpg",
+      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3867.jpg",
+      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3871.jpg",
+      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3874.jpg",
+      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/janis_photo_legs.png",
+      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/luis_push_dd.png",
+      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/luis_push.png",
+      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/Photo_Cardio_ee.png",
+      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/photo_core_a.PNG",
+      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/photo_legs_ii.png",
+      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/photo_pull_b.PNG",
+      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/photo_push_b.PNG",
+      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/Photo_Push_bb.png",
+      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/photo_push_f.PNG",
+      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/photo_push_g.png"
+    ]
+    // const importAll = (r) => r.keys().map(r);
+    // const images = importAll(
+    //   require.context("../../components/image/excercise", false, /\.(png|jpg)$/)
+    // );
 
     // Shuffle the images randomly
-    const shuffledImages = shuffleArray(images);
+    const shuffledImages = shuffleArray(imagesArray);
     // Set the shuffled images in state
     setExerciseImages(shuffledImages);
     

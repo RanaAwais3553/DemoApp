@@ -32,7 +32,7 @@ const useAuth = () => {
   const setUser = async (value) => {
     console.log("invali:", value);
     try {
-      if (!value || Object.keys(value).length === 0) {
+      if (!!!value || Object.keys(value)?.length === 0) {
         // console.error("Attempted to save empty or invalid user data:", value);
         console.log("Attempted to save empty or invalid user data");
         return;

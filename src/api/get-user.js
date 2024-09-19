@@ -7,6 +7,7 @@ const Axios = axios.create({
 });
 
 const GetUser = async (_id) => {
+  console.log("user id before submitting and getting user from GetUser",_id)
   const res = await Axios.get("/users/self", {
     params: { _id }, // Pass the object as the "params" property
     headers: {

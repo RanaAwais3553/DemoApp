@@ -23,7 +23,7 @@ const levelMappings = {
 };
 
 const ActivityLevel = ({ navigation, route }) => {
-  const _id = route.params._id;
+  const _id = route.params?._id;
   const [level, setLevel] = useState(null);
   const { update, isUpdating } = useAccUpdate("WeightTrainScreen");
 

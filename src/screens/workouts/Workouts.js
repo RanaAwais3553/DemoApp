@@ -14,15 +14,13 @@ import { Button, Text } from "../../components/ui";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../../hooks";
 import * as api from "../../api";
-import button_icon from "../../../assets/splash.png"
-import BannerImage2 from  "../../components/image/logo-black.png";
 
 
 const Banner = () => {
   return (
     <View style={styles.banner.imgContainer}>
       <ImageBackground
-        source={BannerImage2}
+        source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/logo-black.png'}}
         style={styles.banner.image}
         imageStyle={styles.banner.imageStyle}
       />

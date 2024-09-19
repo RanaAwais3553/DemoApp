@@ -23,9 +23,6 @@ import {
   Steps
 } from "../components/icons";
 
-import Logo from "../components/image/logo-black.png";
-import Favicon from "../../assets/icon.png";
-
 import { HomeScreen } from "../screens/home";
 import { WorkoutsScreen } from "../screens/workouts";
 import { StatsScreen } from "../screens/stats";
@@ -35,6 +32,7 @@ import MyTabs from './topTabBar'
 import StatsTopTabBar from './statsTopTabBar'
 import UserLeaderBoard from "../screens/stats/UserLeaderBoard";
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Nav = createBottomTabNavigator();
 
@@ -43,6 +41,7 @@ const NavigationScreens = () => {
   const { user, isLoading, } = useAuth();
   const iOS = Platform.OS === "ios";
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [isTabVisible, setIsTabVisible] = useState(false);
 
   useEffect(() => {
     const backAction = () => {
@@ -58,17 +57,26 @@ const NavigationScreens = () => {
   }, []);
 
   useEffect(() => {
-    if (!user.isLoading) {
+    if (!user?.isLoading) {
       // console.log("Navigation:", user.data);
-      if (!user.data) {
+      if (!user?.data) {
         console.log("redirecting to Auth Screen");
         navigation.navigate("AuthScreens", { screen: "LoginScreen" });
       } else {
         setIsInitialLoad(false);
       }
     }
-  }, [user.isLoading, user.data]);
-
+  }, [user?.isLoading, user?.data]);
+useEffect(() => {
+  (async() => {
+    const isLeaderBoard = await AsyncStorage.getItem("isLeaderBoardShown");
+    console.log("isLeaderBoard isLeaderBoard isLeaderBoard",isLeaderBoard == 'false',isLeaderBoard)
+setIsTabVisible(isLeaderBoard == 'true')
+if(isLeaderBoard == null){
+  await AsyncStorage.setItem("isLeaderBoardShown",'false');
+}
+  })()
+},[])
   return (
     <Nav.Navigator
       screenOptions={({ route, navigation }) => ({
@@ -132,7 +140,7 @@ const NavigationScreens = () => {
           headerLeft: () => {
             return (
               <View style={styles.logoContainer}>
-                <Image source={require('../components/image/logo-black.png')} style={styles.logo} resizeMode="cover" />
+                <Image source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/logo-black.png'}} style={styles.logo} resizeMode="cover" />
               </View>
             );
           },
@@ -157,7 +165,7 @@ const NavigationScreens = () => {
           },
         }}
       /> */}
-      <Nav.Screen
+      {isTabVisible && <Nav.Screen
         name="StatsScreen"
         component={UserLeaderBoard}
         options={{
@@ -175,7 +183,7 @@ const NavigationScreens = () => {
             );
           },
         }}
-      />
+      />}
       <Nav.Screen
         name="StepCounterScreen"
         component={MyTabs}

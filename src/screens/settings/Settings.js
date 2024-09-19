@@ -7,7 +7,7 @@ import {
   Modal,
   Text as RNText,
 } from "react-native";
-import { useRef, useState } from "react";
+import { useRef, useState,useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as api from "../../api";
 import { useMutation } from "@tanstack/react-query";
@@ -24,13 +24,11 @@ import {
   WalletCards,
   X,
 } from "lucide-react-native";
-import { About, Calendar, Logout } from "../../components/icons";
-import Avatar from "../../components/image/avatar.png";
-import Logo from "../../components/image/logo-black.png";
+import { About, Calendar, Logout,ChartOutline } from "../../components/icons";
 // import * as Localization from 'expo-localization';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-
+import RNRestart from 'react-native-restart';
+import { useQueryClient } from '@tanstack/react-query';
 const AboutModal = ({ isModalShown, setIsModalShown }) => {
   return (
     <Modal animationType="fade" visible={isModalShown} transparent={true}>
@@ -52,7 +50,7 @@ const AboutModal = ({ isModalShown, setIsModalShown }) => {
           </Button>
 
           <View style={[styles.logo_container]}>
-            <Image style={styles.logo} source={Logo} />
+            <Image style={styles.logo} source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/logo-black.png'}} />
           </View>
           <ScrollView
             contentContainerStyle={styles.scroll_container}
@@ -98,6 +96,8 @@ const Settings = ({ navigation, route }) => {
   // let [locale, setLocale] = useState(Localization.getLocales());
   // console.log(locale[0].regionCode);
   // const option = locale.length > 0 && locale[0].regionCode == 'RU'
+  const [isTabVisible, setIsTabVisible] = useState(false);
+  const queryClient = useQueryClient();
   const option = false
   ? [
       {
@@ -122,6 +122,7 @@ const Settings = ({ navigation, route }) => {
         ],
       },
       { label: "About Us", icon: About },
+      { label: "Show Leader Board", icon: ChartOutline },
       { label: "Logout", icon: Logout },
     ];
 
@@ -132,7 +133,14 @@ const Settings = ({ navigation, route }) => {
   const [isModalShown, setIsModalShown] = useState(false);
 
   const { initPaymentSheet, presentPaymentSheet } = usePaymentSheet();
-
+  useEffect(() => {
+    (async() => {
+      const isLeaderBoard = await AsyncStorage.getItem("isLeaderBoardShown");
+      console.log("isLeaderBoard isLeaderBoard isLeaderBoard",isLeaderBoard == 'false')
+  setIsTabVisible(isLeaderBoard == 'true')
+    })()
+  },[])
+  console.log("isTabVisible isTabVisible",isTabVisible)
   const GetUser = useMutation({
     mutationFn: api.GetUser,
     onSuccess: async (data) => {
@@ -180,6 +188,7 @@ const Settings = ({ navigation, route }) => {
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem("user");
+      queryClient?.clear();
       console.log("User data removed from AsyncStorage");
       setUser({});
       navigation.navigate("AuthScreens", { screen: "LoginScreen" });
@@ -235,7 +244,11 @@ const Settings = ({ navigation, route }) => {
   const handleAboutUs = () => {
     setIsModalShown(true);
   };
-
+const handleToggleLeaderBoard = async () => {
+  const isLeaderBoard = await AsyncStorage.getItem("isLeaderBoardShown");
+  await AsyncStorage.setItem("isLeaderBoardShown", isLeaderBoard == 'false' ? 'true' : 'false');
+  RNRestart?.Restart();
+}
   const handleButton = (type) => {
     console.log({ type });
     switch (type) {
@@ -256,6 +269,9 @@ const Settings = ({ navigation, route }) => {
         break;
       case "About Us":
         handleAboutUs();
+        break;
+      case "Show Leader Board":
+        handleToggleLeaderBoard();
         break;
       default:
         break;
@@ -329,7 +345,7 @@ const Settings = ({ navigation, route }) => {
         >
           <View style={{ alignItems: "center" }}>
             <View style={styles.avatar_container}>
-              <Image style={styles.avatar} source={Avatar} />
+              <Image style={styles.avatar} source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/avatar.png'}} />
             </View>
             <Text
               label={`${user?.data?.name} ${user?.data?.surname}`}
@@ -437,7 +453,7 @@ const Settings = ({ navigation, route }) => {
                           size={28}
                         />
                         <Text
-                          label={type.label}
+                          label={type.label == "Show Leader Board" ? !!isTabVisible ? 'Hide Leader Board' : "Show Leader Board"  : type.label}
                           size="xl"
                           font="medium"
                           style={{

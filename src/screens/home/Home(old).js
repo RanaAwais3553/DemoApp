@@ -25,18 +25,6 @@ import moment from "moment";
 
 import { SignupSuccess, ArrowRight } from "../../components/icons";
 
-// import BannerImage2 from "../../components/image/banner.jpg";
-import BannerImage from "../../components/image/excercise/Photo_Cardio_ee.png";
-import a from "../../components/image/excercise/001.jpg";
-/*import ExcerciseImage_1 from "../../components/image/excercise/001.jpg";
-import ExcerciseImage_2 from "../../components/image/excercise/002.jpg";
-import ExcerciseImage_3 from "../../components/image/excercise/003.jpg";
-import ExcerciseImage_4 from "../../components/image/excercise/004.jpg";
-import ExcerciseImage_5 from "../../components/image/excercise/005.jpg";
-import ExcerciseImage_6 from "../../components/image/excercise/006.jpg";
-import ExcerciseImage_7 from "../../components/image/excercise/007.jpg";*/
-
-import ExcerciseImage_1 from "../../components/image/excercise/photo_legs_ii.png";
 
 const Banner = ({ week, day, excercise }) => {
   const currentDate = moment().format("dddd, MMMM DD, YYYY");
@@ -44,7 +32,7 @@ const Banner = ({ week, day, excercise }) => {
   return (
     <View style={styles.banner.imgContainer}>
       <ImageBackground
-        source={require('../../components/image/excercise/Photo_Cardio_ee.png')}
+        source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/Photo_Cardio_ee.png'}}
         style={styles.banner.image}
         imageStyle={styles.banner.imageStyle}
       >
@@ -89,7 +77,7 @@ const Card = ({ user, day, exercises, image, onPress }) => {
       onPress={onPress}
     >
       <ImageBackground
-        source={image}
+        source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/photo_legs_ii.png'}}
         style={styles.card.image}
         imageStyle={styles.card.imageStyle}
       >
@@ -475,7 +463,7 @@ const HomePage = ({ navigation, route }) => {
                   key={index}
                   user={user}
                   day={index}
-                  image={ExcerciseImage_1}
+                  image={null}
                   exercises={day.exercises}
                   onPress={() => handleWorkoutCard(day.exercises, index + 1)}
                 />

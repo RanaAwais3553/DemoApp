@@ -8,14 +8,10 @@ import { useMutation } from "@tanstack/react-query";
 import { Button, Text } from "../../components/ui";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const FrequencyType = [
-  { name: "Five Days a Week", value: 5 },
-  { name: "Four Days a Week", value: 4 },
-  { name: "Three Days a Week", value: 3 },
-];
 
 const Program = ({ navigation, route }) => {
   const _id = route.params._id;
+  const level =  route.params?.level;
   const [frequency, setFrequency] = useState(null);
   const { update, isUpdating } = useAccUpdate("PlanScreen");
 
@@ -39,7 +35,16 @@ const Program = ({ navigation, route }) => {
   useLayoutEffect(() => {
     GetUser.mutateAsync(_id);
   }, []);
-
+  const FrequencyType = level == 'bg' ? [
+    { name: "Three Days a Week", value: 3 },
+  ] : level == 'adv' ? [
+    { name: "Four Days a Week", value: 4 },
+    { name: "Three Days a Week", value: 3 },
+  ] : [
+    { name: "Two Days a Week", value: 2 },
+  ];
+  
+console.log("level inside program:#@#@",level)
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contents}>

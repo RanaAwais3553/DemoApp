@@ -1,13 +1,11 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet,Image } from 'react-native';
-// import Icon from 'react-native-vector-icons/FontAwesome'; // Or any other icon library you prefer
-import Avatar from "../../components/image/avatar.png";
 const UserCard = ({ name, phone, gender, onDelete,userData,handleNavigation }) => {
     console.log("All Users Data is:##@#@",userData)
   return (
     <TouchableOpacity onPress={() => handleNavigation(userData)} style={styles.card}>
          <View style={styles.avatar_container}>
-              <Image style={styles.avatar} source={require('../../components/image/avatar.png')} />
+              <Image style={styles.avatar} source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/avatar.png'}} />
             </View>
      
       <View style={styles.infoContainer}>

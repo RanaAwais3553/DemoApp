@@ -10,111 +10,9 @@ import {
   import AsyncStorage from '@react-native-async-storage/async-storage';
   import Icon from 'react-native-vector-icons/FontAwesome5'
   import StarIcon from 'react-native-vector-icons/MaterialIcons';
-
+  import GetUserSteps from '../../api/getSteps'
   const Weekend = () => {
-    const [stepCount, setStepCount] = useState(0);
-    const data = [
-        {
-          name: "Seoul",
-          population: 21500000,
-          color: "rgba(131, 167, 234, 1)",
-          legendFontColor: "#7F7F7F",
-          legendFontSize: 15
-        },
-        {
-          name: "Toronto",
-          population: 2800000,
-          color: "#F00",
-          legendFontColor: "#7F7F7F",
-          legendFontSize: 15
-        },
-        {
-          name: "Beijing",
-          population: 527612,
-          color: "red",
-          legendFontColor: "#7F7F7F",
-          legendFontSize: 15
-        },
-        {
-          name: "New York",
-          population: 8538000,
-          color: "#ffffff",
-          legendFontColor: "#7F7F7F",
-          legendFontSize: 15
-        },
-        {
-          name: "Moscow",
-          population: 11920000,
-          color: "rgb(0, 0, 255)",
-          legendFontColor: "#7F7F7F",
-          legendFontSize: 15
-        }
-      ];
-
-
-    // useEffect(() => {
-    //   const getStoredSteps = async () => {
-    //     try {
-    //       const savedSteps = await AsyncStorage.getItem('stepCount');
-    //       const savedDate = await AsyncStorage.getItem('stepDate');
-    //       const currentDate = getCurrentDateString();
-    //       console.log(currentDate);
-    //       console.log(savedDate);
-    //       if (savedDate !== currentDate) {
-    //         // It's a new day, reset the step count
-    //         setStepCount(0);
-    //         storeSteps(0, currentDate);
-    //       } else if (savedSteps !== null) {
-    //         setStepCount(parseInt(savedSteps, 10));
-    //       }
-    //     } catch (error) {
-    //       console.error("Failed to load steps from storage", error);
-    //     }
-    //   };
-  
-    //   getStoredSteps();
-  
-    //   let lastKnownStepCount = 0;
-  
-    //   const subscribe = Pedometer.watchStepCount(result => {
-    //     if (lastKnownStepCount === 0) {
-    //       lastKnownStepCount = result.steps;
-    //     } else {
-    //       const stepsSinceLastCheck = result.steps - lastKnownStepCount;
-    //       if (stepsSinceLastCheck > 0) {
-    //         setStepCount(prevStepCount => {
-    //           const newStepCount = prevStepCount + stepsSinceLastCheck;
-    //           storeSteps(newStepCount, getCurrentDateString());
-    //           return newStepCount;
-    //         });
-    //       }
-    //       lastKnownStepCount = result.steps;
-    //     }
-    //   });
-  
-    //   return () => {
-    //     subscribe.remove();
-    //   };
-    // }, []);
-  
-    const getCurrentDateString = () => {
-      const currentDate = new Date();
-      // Manually format the date as YYYY-MM-DD based on local time
-      const year = currentDate.getFullYear();
-      const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-      const day = String(currentDate.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`;
-    };
-  
-    const storeSteps = async (steps, date) => {
-      try {
-        await AsyncStorage.setItem('stepCount', steps.toString());
-        await AsyncStorage.setItem('stepDate', date);
-      } catch (error) {
-        console.error("Failed to save steps to storage", error);
-      }
-    };
-  const barData = [
+    const barData = [
     {
         id:'1',
         height:120,
@@ -133,7 +31,7 @@ import {
     },
     {
         id:'5',
-        height:200,
+        height:210,
     },
     {
         id:'6',
@@ -144,10 +42,64 @@ import {
         height:140,
     },
 
-  ]
+  ];
+  const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+ 
+  const [stepsDays, setStepsDays] = useState(null);
+  useEffect(() => {
+    const getUserId = async () => {
+      const userData = await AsyncStorage.getItem("user");
+      if (userData) {
+        const parsedData = JSON.parse(userData);
+        return parsedData;
+      }
+    }
+const getUserSteps = async () => {
+  const userData = await getUserId();
+  if(userData?._id){ 
+  const responseData = await GetUserSteps(userData?._id);
+  console.log("user steps in monthly calander",responseData)
+  if(responseData && responseData?.length > 0){ 
+    const last7Days = [
+      { day: 'Monday', steps: 0 },
+      { day: 'Tuesday', steps: 0 },
+      { day: 'Wednesday', steps: 0 },
+      { day: 'Thursday', steps: 0 },
+      { day: 'Friday', steps: 0 },
+      { day: 'Saturday', steps: 0 },
+      { day: 'Sunday', steps: 0 }
+    ];
+
+    // Iterate through the data array
+    responseData.forEach(item => {
+      const date = new Date(item.date); // Convert the date string to a Date object
+      const dayOfWeekIndex = date.getUTCDay(); // Get the numeric index for the day (0 is Sunday, 1 is Monday, etc.)
+      
+      // Adjust Sunday to index 6, and map other days to the array
+      const dayIndex = dayOfWeekIndex === 0 ? 6 : dayOfWeekIndex - 1;
+    
+      // Update the steps in the last7Days array
+      last7Days[dayIndex].steps = item.steps;
+    });
+    
+    // Print the result
+    console.log("last7Days last7Days",last7Days);
+  setStepsDays(last7Days);
+}
+  }
+
+}
+getUserSteps()
+  },[])
+
+  function scaleValue(value) {
+    return (value * 209) / 9000;
+  }
+  console.log("value if steps is 9000",scaleValue(300))
+
     return (
      <SafeAreaView  style={styles.container}>
-<ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{display:'flex',flexGrow:1}}>
+{stepsDays && stepsDays.length > 0 ? <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{display:'flex',flexGrow:1}}>
 <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',paddingHorizontal:22,backgroundColor:'#fff',marginTop:22}}>
 <Text style={{color:'rgba(104, 66, 255, 0.9)',fontWeight:'bold'}}>M</Text>
 <Text style={{color:'rgba(104, 66, 255, 0.9)',fontWeight:'bold'}}>T</Text>
@@ -159,10 +111,10 @@ import {
 
 </View>
 <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between', paddingHorizontal:14,marginTop:18}}>
-{barData.map((data) =>  <View key={data.id} style={{height:220,width:30,backgroundColor:'rgba(104, 66, 255,0.4)',borderRadius:22,}}>
-    <View style={{position:'absolute',backgroundColor:'#6842FF',bottom:0,height:data.height,width:30,borderRadius:22}}>
+{stepsDays?.map((data,index) =>  <View key={index} style={{height:220,width:30,backgroundColor:'rgba(104, 66, 255,0.4)',borderRadius:22,}}>
+    <View style={{position:'absolute',backgroundColor:'#6842FF',bottom:0,height:scaleValue(data?.steps),width:30,borderRadius:22}}>
     <View style={{display:'flex',alignItems:'center',left:0,right:0, position:'absolute',top:-22}}>
-<Text style={{textAlign:'center'}}>{data.height}</Text>   
+<Text style={{textAlign:'center'}}>{data?.steps}</Text>   
     </View>
     <View style={{display:'flex',alignItems:'center'}}>
     <Icon name="walking" size={16} color="red" />
@@ -400,6 +352,10 @@ import {
 
 </View>
 </ScrollView>
+:
+<View style={{display:'flex',flex:1,justifyContent:'center',alignItems:'center',paddingHorizontal:16}}>
+  <Text style={{color:'#121212',fontSize:16}}>It appears to be a new account with no records yet. If this is not the case, please close and reopen the app.</Text>
+  </View>}
      </SafeAreaView>
     );
   };

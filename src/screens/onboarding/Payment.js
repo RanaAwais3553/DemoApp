@@ -231,8 +231,8 @@ const Payment = ({ navigation, route }) => {
     mutationFn: api.GeneratePlan,
     onSuccess: async (data) => {
       console.log({ plan: JSON.stringify(data) });
-      console.log("plan generated");
-      GetUser.mutateAsync(data.user);
+      console.log("plan generated GeneratePlan",data?.user);
+      GetUser.mutateAsync(data?.user);
     },
     onError: (error) => {
       console.log({ error });
@@ -244,10 +244,10 @@ const Payment = ({ navigation, route }) => {
 
   const GetUser = useMutation({
     mutationFn: api.GetUser,
-    onMutate: (variables) => console.log({ variables }),
+    onMutate: (variables) => console.log("on onMutate GetUser",{ variables }),
     onSuccess: async (data) => {
-      // console.log({ useraaa: data });
-      setUser(data);
+      console.log("on user success loggedIn",{ useraaa: data });
+     await setUser(data);
       setSubsLoading(false);
       navigation.navigate("NavigationScreens", {
         screen: "HomeScreens",
@@ -264,6 +264,7 @@ const Payment = ({ navigation, route }) => {
       console.log("paymnet initiated");
       SubscriptionIntent.mutateAsync({ _id });
     } catch (error) {
+      Alert.alert("Please check your internet connection and try again to loggedIn your account")
       console.log(error);
     } finally {
       console.log("execute the rest of the codes");

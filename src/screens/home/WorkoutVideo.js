@@ -12,8 +12,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { WebView } from "react-native-webview";
 
 import { Button, Text } from "../../components/ui";
-
-import Spinner from "../../components/image/spinner.png";
 import { Play } from "../../components/icons";
 import { ArrowLeft, CloudCog, X as Exit } from "lucide-react-native";
 
@@ -111,7 +109,7 @@ console.log("video link is:#@#@#@",Link)
           {isLoading ? (
             <View style={styles.container}>
               <Animated.Image
-                source={Spinner}
+                source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/spinner.png'}}
                 style={[rotateAnimStyle, styles.spinner]}
               />
             </View>
@@ -167,7 +165,7 @@ console.log("video link is:#@#@#@",Link)
                     }}
                   >
                     <Animated.Image
-                      source={Spinner}
+                      source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/spinner.png'}}
                       style={[rotateAnimStyle, styles.spinner]}
                     />
                   </View>

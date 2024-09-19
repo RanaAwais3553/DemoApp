@@ -3,7 +3,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Button, Seperator, Text } from "../../components/ui";
 import { Apple, Facebook, Google } from "../../components/icons";
-import Logo from "../../components/image/logo-black.png";
 import { useMutation } from "@tanstack/react-query";
 import * as api from "../../api";
 
@@ -33,7 +32,7 @@ const Auth = ({ navigation, route }) => {
         <View style={styles.container}>
           <View style={styles.box}>
             <View style={styles.logo_container}>
-              <Image style={styles.logo} source={require('../../components/image/logo-black.png')} />
+              <Image style={styles.logo} source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/logo-black.png'}} />
             </View>
             {false && (
               <View style={styles.sso_container}>

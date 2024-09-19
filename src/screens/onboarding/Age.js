@@ -117,10 +117,11 @@ const Age = ({ navigation, route }) => {
               <DateTimePicker
                 mode={"date"}
                 value={date}
-                display={iOS ? "spinner" : "default"}
+                display={"spinner"}
                 onChange={(e, val) => setDate(val)}
                 maximumDate={maximumDate}
                 dateFormat={"longdate"}
+                themeVariant="light"
               />
             ) : (
               <AndroidDatePicker

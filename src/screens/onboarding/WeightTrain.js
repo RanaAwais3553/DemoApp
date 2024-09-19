@@ -15,7 +15,8 @@ const RegularityType = [
 ];
 
 const WeightTrain = ({ navigation, route }) => {
-  const _id = route.params._id;
+  const _id = route.params?._id;
+  const level =  route.params?.level;
   const [regularity, setRegularity] = useState(null);
   const { update, isUpdating } = useAccUpdate("GymGoalScreen");
 
@@ -40,7 +41,7 @@ const WeightTrain = ({ navigation, route }) => {
     GetUser.mutateAsync(_id);
   }, []);
 
-  console.log({ regularity, _id });
+  console.log("waight train inside level",level, regularity, _id );
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contents}>

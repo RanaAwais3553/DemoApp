@@ -11,7 +11,7 @@ const useAccUpdate = (next) => {
     mutationFn: api.UserUpdate,
     onSuccess: async (data) => {
       setIsLoading(false);
-      navigation.navigate(next, { _id: data?._id });
+      navigation.navigate(next, { _id: data?._id,level:data?.level });
     },
     onError: (error) => {
       setIsLoading(false);

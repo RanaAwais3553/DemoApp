@@ -4,6 +4,7 @@ import {
     View,
     SafeAreaView,
     ScrollView,
+    TouchableOpacity
   } from "react-native";
   import React, { useState, useEffect } from "react";
   import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -121,10 +122,14 @@ try {
         return days[today.getDay()];
       };
       const getGoalSteps = await AsyncStorage.getItem(getDayName());
+      console.log("getGoalSteps getGoalSteps",getGoalSteps)
       if(!!getGoalSteps){
-        setGoalSteps(getGoalSteps)
+        setGoalSteps(getGoalSteps);
       }else{
         setVisibleModel(true);
+        setLocalStorageSteps(0);
+        setSteps(0);
+        await AsyncStorage.setItem(STEP_STORAGE_KEY, '0');
       }
       })()
   },[visibleModel])
@@ -149,14 +154,14 @@ try {
         {visibleModel && <InputStorageComponent setVisibleModel = {setVisibleModel}/>}
   <ScrollView showsVerticalScrollIndicator={false} style={{display:'flex',flexGrow:1}} contentContainerStyle={{display:'flex',flexGrow:1}}>
     <View style={{display:'flex',marginVertical:32,alignItems:'center'}}>
-      <View style={{height:180,width:180,borderRadius:100,borderWidth:14,borderColor:'rgba(104, 66, 255, 0.9)',justifyContent:'center',alignItems:'center',marginTop:8}}>
+      <TouchableOpacity onPress={() => setVisibleModel(true)} style={{height:180,width:180,borderRadius:100,borderWidth:14,borderColor:'rgba(104, 66, 255, 0.9)',justifyContent:'center',alignItems:'center',marginTop:8}}>
   <Steps color="rgba(104, 66, 255, 0.9)"/>
   <Text style={{textAlign:'center',fontWeight:'bold',fontSize:26,letterSpacing:2.5}}>{steps + localstorageSteps}</Text>
   <View style={{display:'flex',marginTop:8}}>
   <Text style={{textAlign:'center',fontWeight:'bold',fontSize:12,color:'#555'}}>{currentDay}</Text>
   <Text style={{textAlign:'center',fontWeight:'bold',fontSize:12,color:'#555'}}>GOAL: {goalSteps ? goalSteps : 0}</Text>
   </View>
-      </View>
+      </TouchableOpacity>
      
   
     </View>

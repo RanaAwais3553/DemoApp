@@ -1,14 +1,12 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet,Image, Dimensions } from 'react-native';
-// import Icon from 'react-native-vector-icons/FontAwesome'; // Or any other icon library you prefer
-import Avatar from "../../components/image/avatar.png";
 const UserDetailScreen = ({navigation,route}) => {
     const {userData} = route?.params
     console.log("route.params.userData",userData)
   return (
     <View style={styles.container}>
         <View style={{height:Dimensions.get('window').height/3,width:'100%',display:'flex',justifyContent:'center',alignItems:'center'}}>
-      <Image style={styles.avatar} source={require('../../components/image/avatar.png')} />
+      <Image style={styles.avatar} source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/avatar.png'}} />
       </View>
       <View style={{display:'flex',padding:22,backgroundColor:'#ffffff',elevation:3,width:'100%'}}>
       <Text style={styles.nameText}>Name: {userData?.name}</Text>

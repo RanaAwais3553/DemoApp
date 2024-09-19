@@ -36,9 +36,7 @@ import {
   Lock,
   Message,
 } from "../../components/icons";
-
-import Logo from "../../components/image/logo-black.png";
-import { CloudCog } from "lucide-react-native";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import {EXPO_PUBLIC_API_URL} from '@env'
 
 const SSO_btn = [
@@ -97,6 +95,7 @@ console.log("in login.js file env data is:$##@#@",EXPO_PUBLIC_API_URL,process.en
         setIsPasswordShown(false);
         console.log({ values });
       } catch (error) {
+        setIsLoading(false);
         console.log(error);
       }
     },
@@ -159,18 +158,15 @@ console.log("in login.js file env data is:$##@#@",EXPO_PUBLIC_API_URL,process.en
       // edges={["right", "left", "bottom"]}
     >
       <StatusBar hidden={false} />
-      <KeyboardAvoidingView
-        behavior={iOSPlatform ? "padding" : "height"}
-        style={{ flex: 1, justifyContent: "center" }}
-      >
-        <View style={[styles.box, { marginTop: isKeyboardShown ? 48 : 0 }]}>
+      <KeyboardAwareScrollView style={{marginTop:58}} bounces={false}  showsVerticalScrollIndicator={false}>
+        <View style={[styles.box]}>
           <View
             style={[
               styles.logo_container,
-              { display: isKeyboardShown ? "none" : "flex" },
+              
             ]}
           >
-            <Image style={styles.logo} source={require('../../components/image/logo-black.png')} />
+            <Image style={styles.logo} source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/logo-black.png'}} />
           </View>
           <Text label="Login to your Account" size="xl_6" font="bold" />
 
@@ -253,7 +249,7 @@ console.log("in login.js file env data is:$##@#@",EXPO_PUBLIC_API_URL,process.en
             </View>
           )}
         </View>
-      </KeyboardAvoidingView>
+      </KeyboardAwareScrollView>
       <View >
         <View style={{ flexDirection: 'row', justifyContent: "center" }}>
           <Text

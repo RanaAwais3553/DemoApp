@@ -30,8 +30,6 @@ import {
     Lock,
     Message,
   } from "../../components/icons";
-  
-  import Logo from "../../components/image/logo-black.png";
 
   
   const Email = ({ navigation }) => {

@@ -11,9 +11,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useFocusEffect } from "@react-navigation/native";
-
-import WelcomeImage from "../../components/image/welcome.jpg";
-import Spinner from "../../components/image/spinner.png";
 import { wait } from "../../helpers";
 import { useAuth } from "../../hooks";
 
@@ -86,10 +83,10 @@ const Welcome = ({ navigation }) => {
         style={styles.container}
         onPress={handleScreenTouch}
       >
-        <ImageBackground style={styles.image} source={require('../../components/image/welcome.jpg')}>
+        <ImageBackground style={styles.image} source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/welcome.jpg'}}>
           {isLoadingg && (
             <Animated.Image
-              source={require('../../components/image/spinner.png')}
+              source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/spinner.png'}}
               style={[rotateAnimStyle, styles.spinner]}
             />
           )}
