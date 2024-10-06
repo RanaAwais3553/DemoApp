@@ -32,7 +32,7 @@ const Banner = ({ week, day, excercise }) => {
   return (
     <View style={styles.banner.imgContainer}>
       <ImageBackground
-        source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/Photo_Cardio_ee.png'}}
+        source={require('../../../assets/image/excercise/Photo_Cardio_ee.png')}
         style={styles.banner.image}
         imageStyle={styles.banner.imageStyle}
       >
@@ -77,7 +77,7 @@ const Card = ({ user, day, exercises, image, onPress }) => {
       onPress={onPress}
     >
       <ImageBackground
-        source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/photo_legs_ii.png'}}
+        source={require('../../../assets/image/excercise/photo_legs_ii.png')}
         style={styles.card.image}
         imageStyle={styles.card.imageStyle}
       >

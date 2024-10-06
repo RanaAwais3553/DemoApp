@@ -1,16 +1,21 @@
-import React from 'react';
+import React,{useRef} from 'react';
 import { View, Text, StyleSheet,Animated } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FlagIcon from 'react-native-vector-icons/FontAwesome';
 import DistanceIcon from 'react-native-vector-icons/MaterialIcons';
-
+import CircularProgress from 'react-native-circular-progress-indicator';
 // const radius = 25;
 const  radius  = 20
 const borderWidth = 2;
 const radiusMinusBorder = radius - borderWidth ;
 // const radiusMinusBorder = radius - 4
-const StepsCharts = ({ distance,unite, additionalInfo,heading }) => {
+const StepsCharts = ({ distance,unite, additionalInfo,heading,color,locationIcon,maxValue,value }) => {
+  const progressRef = useRef(null);
 
+  useFocusEffect(() => {
+    progressRef.current.reAnimate();
+  })
     function percentToDegrees(percent) {
         return `${percent * 3.6} deg`
       }
@@ -63,7 +68,7 @@ const StepsCharts = ({ distance,unite, additionalInfo,heading }) => {
               },
             ]}
           >
-           {unite == 'KM' ? <DistanceIcon name="location-on" size={20} color="#FF6347" /> : unite == 'KCAL' ? <Icon name="fire" size={20} color="#FF6347" /> : <DistanceIcon name="access-time" size={20} color="#FF6347" />}
+           {unite == 'KM' ? <DistanceIcon name="location-on" size={20} color={color} /> : unite == 'KCAL' ? <Icon name="fire" size={20} color={color} /> : <DistanceIcon name="access-time" size={20} color={color} />}
           </View>
         )
       }
@@ -77,25 +82,38 @@ const StepsCharts = ({ distance,unite, additionalInfo,heading }) => {
       </Text>
       <Text style={styles.distanceLabel}>{heading}</Text>
 <View style={{marginVertical:12}}>
-<View
+<CircularProgress
+    ref={progressRef}
+    showProgressValue = {false}
+    imageProps={locationIcon}
+
+  value={value}
+  radius={30}
+  duration={2000}
+  maxValue={maxValue}
+  inActiveStrokeOpacity={0.2}
+  activeStrokeColor={color}
+/>
+{/* <View
         style={[
           styles.outerCircle,
           {
             width: radius * 2,
             height: radius * 2,
             borderRadius: radius,
-            backgroundColor: 'rgba(104, 66, 255, 0.9)',
+            backgroundColor: color,
           },
         ]}
       >
         {renderHalfCircle()}
         {renderHalfCircle()}
         {renderInnerCircle(unite)}
-      </View>
+      </View> */}
+
       </View>
       <View style={{position:'absolute',bottom:10,right:5}}>
-      <Text style={styles.additionalInfo}>
-      <FlagIcon name="flag" size={10} color="#ff6347" />
+      <Text style={{...styles.additionalInfo,color:color}}>
+      <FlagIcon name="flag" size={10} color={color} />
         {" "}{additionalInfo}</Text>
       </View>
     </View>

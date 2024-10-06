@@ -4,6 +4,7 @@ import {
     StyleSheet,
     Text,
     View,
+    Animated
   } from "react-native";
   import React, { useState, useEffect } from "react";
   // import { Pedometer } from 'expo-sensors';
@@ -11,40 +12,10 @@ import {
   import Icon from 'react-native-vector-icons/FontAwesome5'
   import StarIcon from 'react-native-vector-icons/MaterialIcons';
   import GetUserSteps from '../../api/getSteps'
+  import AnimatedBar from './AnimatedBar'
+  import { useIsFocused } from '@react-navigation/native';
   const Weekend = () => {
-    const barData = [
-    {
-        id:'1',
-        height:120,
-    },
-    {
-        id:'2',
-        height:180,
-    },
-    {
-        id:'3',
-        height:150,
-    },
-    {
-        id:'4',
-        height:80,
-    },
-    {
-        id:'5',
-        height:210,
-    },
-    {
-        id:'6',
-        height:170,
-    },
-    {
-        id:'7',
-        height:140,
-    },
-
-  ];
-  const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
- 
+    const isFocused = useIsFocused();
   const [stepsDays, setStepsDays] = useState(null);
   useEffect(() => {
     const getUserId = async () => {
@@ -83,23 +54,25 @@ const getUserSteps = async () => {
     });
     
     // Print the result
-    console.log("last7Days last7Days",last7Days);
+  console.log("last7Days last7Days",last7Days);
   setStepsDays(last7Days);
 }
   }
-
 }
-getUserSteps()
-  },[])
+if(isFocused){
+  getUserSteps()
+}
 
+  },[isFocused])
+ 
   function scaleValue(value) {
-    return (value * 209) / 9000;
+    return (4500 * 209) / 9000;
   }
   console.log("value if steps is 9000",scaleValue(300))
 
     return (
      <SafeAreaView  style={styles.container}>
-{stepsDays && stepsDays.length > 0 ? <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{display:'flex',flexGrow:1}}>
+{stepsDays && stepsDays?.length > 0 ? <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{display:'flex',flexGrow:1}}>
 <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',paddingHorizontal:22,backgroundColor:'#fff',marginTop:22}}>
 <Text style={{color:'rgba(104, 66, 255, 0.9)',fontWeight:'bold'}}>M</Text>
 <Text style={{color:'rgba(104, 66, 255, 0.9)',fontWeight:'bold'}}>T</Text>
@@ -111,7 +84,8 @@ getUserSteps()
 
 </View>
 <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between', paddingHorizontal:14,marginTop:18}}>
-{stepsDays?.map((data,index) =>  <View key={index} style={{height:220,width:30,backgroundColor:'rgba(104, 66, 255,0.4)',borderRadius:22,}}>
+{stepsDays?.map((data,index) => <AnimatedBar key={index} data={data}/> )}
+{/* <View key={index} style={{height:220,width:30,backgroundColor:'rgba(104, 66, 255,0.4)',borderRadius:22,}}>
     <View style={{position:'absolute',backgroundColor:'#6842FF',bottom:0,height:scaleValue(data?.steps),width:30,borderRadius:22}}>
     <View style={{display:'flex',alignItems:'center',left:0,right:0, position:'absolute',top:-22}}>
 <Text style={{textAlign:'center'}}>{data?.steps}</Text>   
@@ -121,7 +95,7 @@ getUserSteps()
     </View>
     </View>
     
-</View>)}
+</View> */}
 
 </View>
 <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginHorizontal:30,marginTop:40}}>

@@ -7,10 +7,10 @@ const ExpandableUserCard = ({ user }) => {
   console.log("user data is:#@#@#@",user)
   return (
     <View style={styles.cardContainer}>
-      <Image source={{ uri: user.image }} style={styles.userImage} />
+      <Image source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRol2F2v-15-bJMfYDMWZO188rSu79Fwerjog&s' }} style={styles.userImage} />
       <View style={styles.userInfo}>
-        <Text style={styles.userName}>{user.name}</Text>
-        <Text style={styles.userScore}>FootSteps: {user.score}</Text>
+        <Text numberOfLines={1} style={styles.userName}>{user.username}</Text>
+        <Text style={styles.userScore}>FootSteps: {user.totalSteps}</Text>
       </View>
     </View>
   );

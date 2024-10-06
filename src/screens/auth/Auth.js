@@ -32,7 +32,7 @@ const Auth = ({ navigation, route }) => {
         <View style={styles.container}>
           <View style={styles.box}>
             <View style={styles.logo_container}>
-              <Image style={styles.logo} source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/logo-black.png'}} />
+              <Image style={styles.logo} resizeMode="cover" source={require('../../../assets/image/logo-black.png')} />
             </View>
             {false && (
               <View style={styles.sso_container}>
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   },
   logo_container: {
     width: "100%",
-    height: 125,
+    height: 150,
   },
   logo: {
     height: "75%",

@@ -34,7 +34,7 @@ import {
 } from "../../components/icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ArrowRight } from "lucide-react-native";
-import {EXPO_PUBLIC_API_URL} from '@env'
+// import {EXPO_PUBLIC_API_URL} from '@env'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 const SSO_btn = [
   { name: "facebook", icon: Facebook },
@@ -74,7 +74,7 @@ const Signup = ({ navigation }) => {
       keyboardDidHideListener.remove();
     };
   }, []);
-  console.log("API_BASE in component",process.env.EXPO_PUBLIC_API_URL,EXPO_PUBLIC_API_URL)
+  // console.log("API_BASE in component",process.env.EXPO_PUBLIC_API_URL,EXPO_PUBLIC_API_URL)
   const validationSchema = Yup.object({
     name: Yup.string()
       .min(3, "First name must be at least 3 characters long")

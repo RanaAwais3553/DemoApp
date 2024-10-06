@@ -41,7 +41,6 @@ const NavigationScreens = () => {
   const { user, isLoading, } = useAuth();
   const iOS = Platform.OS === "ios";
   const [isInitialLoad, setIsInitialLoad] = useState(true);
-  const [isTabVisible, setIsTabVisible] = useState(false);
 
   useEffect(() => {
     const backAction = () => {
@@ -67,16 +66,6 @@ const NavigationScreens = () => {
       }
     }
   }, [user?.isLoading, user?.data]);
-useEffect(() => {
-  (async() => {
-    const isLeaderBoard = await AsyncStorage.getItem("isLeaderBoardShown");
-    console.log("isLeaderBoard isLeaderBoard isLeaderBoard",isLeaderBoard == 'false',isLeaderBoard)
-setIsTabVisible(isLeaderBoard == 'true')
-if(isLeaderBoard == null){
-  await AsyncStorage.setItem("isLeaderBoardShown",'false');
-}
-  })()
-},[])
   return (
     <Nav.Navigator
       screenOptions={({ route, navigation }) => ({
@@ -111,7 +100,6 @@ if(isLeaderBoard == null){
             color = focused ? "#6842FF" : "#A8A8A8";
             label = "Settings";
           }
-          console.log("Icon type is:#@#@",Icon)
           return (
             <View
               style={{
@@ -140,7 +128,7 @@ if(isLeaderBoard == null){
           headerLeft: () => {
             return (
               <View style={styles.logoContainer}>
-                <Image source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/logo-black.png'}} style={styles.logo} resizeMode="cover" />
+                <Image source={require('../../assets/image/logo-black.png')} style={styles.logo} resizeMode="cover" />
               </View>
             );
           },
@@ -165,7 +153,7 @@ if(isLeaderBoard == null){
           },
         }}
       /> */}
-      {isTabVisible && <Nav.Screen
+       <Nav.Screen
         name="StatsScreen"
         component={UserLeaderBoard}
         options={{
@@ -183,7 +171,7 @@ if(isLeaderBoard == null){
             );
           },
         }}
-      />}
+      />
       <Nav.Screen
         name="StepCounterScreen"
         component={MyTabs}

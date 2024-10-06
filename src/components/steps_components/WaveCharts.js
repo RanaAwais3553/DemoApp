@@ -3,12 +3,12 @@ import { View, Text, StyleSheet } from 'react-native';
 import { LineChart, Grid } from 'react-native-svg-charts';
 import * as shape from 'd3-shape';
 
-const WaveChart = ({currentDay}) => {
-    const data = [50, 10, 40, 65, 35, 91, 35]; // Sample data points for the wave
+const WaveChart = ({currentDay,stepsDays,isShowGraph}) => {
+    const data = stepsDays && [stepsDays[0]?.steps, stepsDays[1]?.steps, stepsDays[2]?.steps, stepsDays[3]?.steps, stepsDays[4]?.steps, stepsDays[5]?.steps, stepsDays[6]?.steps]; // Sample data points for the wave
 
     return (
         <View style={styles.container}>
-            <LineChart
+           {isShowGraph && !!data ? <LineChart
                 style={styles.chart}
                 data={data}
                 curve={shape.curveNatural}
@@ -17,6 +17,15 @@ const WaveChart = ({currentDay}) => {
             >
                 <Grid />
             </LineChart>
+            :
+            <>
+            <View style={{height:1,width:'100%',marginBottom:22, backgroundColor:'#f2f2f2'}}/>
+            <View style={{height:1,width:'100%',marginBottom:22,backgroundColor:'#f2f2f2'}}/>
+            <View style={{height:1,width:'100%',marginBottom:22,backgroundColor:'#f2f2f2'}}/>
+            <View style={{height:1,width:'100%',marginBottom:22,backgroundColor:'#f2f2f2'}}/>
+            <View style={{height:1,width:'100%',marginBottom:22,backgroundColor:'#f2f2f2'}}/>
+            </>
+        }
             <View style={styles.dayLabels}>
                 {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map((day, index) => (
                     <Text

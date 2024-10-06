@@ -36,6 +36,7 @@ const Program = ({ navigation, route }) => {
     GetUser.mutateAsync(_id);
   }, []);
   const FrequencyType = level == 'bg' ? [
+    { name: "Four Days a Week", value: 4 },
     { name: "Three Days a Week", value: 3 },
   ] : level == 'adv' ? [
     { name: "Four Days a Week", value: 4 },

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Modal, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, TextInput, Button, Modal, StyleSheet,Alert, TouchableOpacity, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/FontAwesome';
-const InputStorageComponent = ({setVisibleModel}) => {
-  const [input, setInput] = useState('');
+const InputStorageComponent = ({setVisibleModel,steps}) => {
+  const [input, setInput] = useState(0);
   const [isModalVisible, setModalVisible] = useState(true);
 
   // Function to store data into local storage
@@ -23,9 +23,14 @@ const InputStorageComponent = ({setVisibleModel}) => {
 
   // Function to handle saving input
   const handleSave = () => {
-    storeData(input);
-    setVisibleModel(false);
-    setModalVisible(false); // Close modal after saving
+    console.log("data is:#@#@#",Number(input) + 20 > steps)
+    if(Number(input)  > (steps + 20)){
+      storeData(input);
+      setVisibleModel(false);
+      setModalVisible(false); // Close modal after saving
+    }else{ 
+      Alert.alert("Goal Steps must be greater than current steps:",`${steps + 20}`)
+    }
   };
 
   return (

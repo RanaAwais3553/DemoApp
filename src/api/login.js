@@ -13,7 +13,7 @@ const Axios = axios.create({
 };*/
 
 const Login = async (params) => {
-  console.log("data",API_BASE);
+  console.log("API base url is:#@#@",API_BASE);
   //use query mutation error will already be handled
   const res = await Axios.post("/users/login", params, {
     headers: {

@@ -109,7 +109,7 @@ console.log("video link is:#@#@#@",Link)
           {isLoading ? (
             <View style={styles.container}>
               <Animated.Image
-                source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/spinner.png'}}
+                source={require('../../../assets/image/spinner.png')}
                 style={[rotateAnimStyle, styles.spinner]}
               />
             </View>
@@ -165,7 +165,7 @@ console.log("video link is:#@#@#@",Link)
                     }}
                   >
                     <Animated.Image
-                      source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/spinner.png'}}
+                      source={require('../../../assets/image/spinner.png')}
                       style={[rotateAnimStyle, styles.spinner]}
                     />
                   </View>

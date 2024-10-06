@@ -83,10 +83,10 @@ const Welcome = ({ navigation }) => {
         style={styles.container}
         onPress={handleScreenTouch}
       >
-        <ImageBackground style={styles.image} source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/welcome.jpg'}}>
+        <ImageBackground style={styles.image} source={require('../../../assets/image/welcome.jpg')}>
           {isLoadingg && (
             <Animated.Image
-              source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/spinner.png'}}
+              source={require('../../../assets/image/spinner.png')}
               style={[rotateAnimStyle, styles.spinner]}
             />
           )}

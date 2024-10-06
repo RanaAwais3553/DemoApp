@@ -24,11 +24,11 @@ import {
   WalletCards,
   X,
 } from "lucide-react-native";
-import { About, Calendar, Logout,ChartOutline } from "../../components/icons";
+import { About, Calendar, Logout,ChartOutline,User } from "../../components/icons";
 // import * as Localization from 'expo-localization';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import RNRestart from 'react-native-restart';
 import { useQueryClient } from '@tanstack/react-query';
+import { useIsFocused } from '@react-navigation/native';
 const AboutModal = ({ isModalShown, setIsModalShown }) => {
   return (
     <Modal animationType="fade" visible={isModalShown} transparent={true}>
@@ -50,7 +50,7 @@ const AboutModal = ({ isModalShown, setIsModalShown }) => {
           </Button>
 
           <View style={[styles.logo_container]}>
-            <Image style={styles.logo} source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/logo-black.png'}} />
+            <Image style={styles.logo} resizeMode="cover" source={require('../../../assets/image/logo-black.png')} />
           </View>
           <ScrollView
             contentContainerStyle={styles.scroll_container}
@@ -93,9 +93,6 @@ const AboutModal = ({ isModalShown, setIsModalShown }) => {
 };
 
 const Settings = ({ navigation, route }) => {
-  // let [locale, setLocale] = useState(Localization.getLocales());
-  // console.log(locale[0].regionCode);
-  // const option = locale.length > 0 && locale[0].regionCode == 'RU'
   const [isTabVisible, setIsTabVisible] = useState(false);
   const queryClient = useQueryClient();
   const option = false
@@ -112,6 +109,8 @@ const Settings = ({ navigation, route }) => {
       { label: "Logout", icon: Logout },
     ]
   : [
+    { label: "Account Info", icon: User,
+    child:[] },
       {
         label: "Subscription",
         icon: Calendar,
@@ -122,25 +121,16 @@ const Settings = ({ navigation, route }) => {
         ],
       },
       { label: "About Us", icon: About },
-      { label: "Show Leader Board", icon: ChartOutline },
-      { label: "Logout", icon: Logout },
+      // { label: "Logout", icon: Logout },
     ];
-
+    const isFocused = useIsFocused();
   const { user, setUser } = useAuth();
   const scrollViewRef = useRef(null);
   const [showSubs, setShowSubs] = useState(false);
   const [isPaymentLoading, setPaymentLoading] = useState(false);
   const [isModalShown, setIsModalShown] = useState(false);
-
+    const [storageUser , setStorageUser] = useState(null)
   const { initPaymentSheet, presentPaymentSheet } = usePaymentSheet();
-  useEffect(() => {
-    (async() => {
-      const isLeaderBoard = await AsyncStorage.getItem("isLeaderBoardShown");
-      console.log("isLeaderBoard isLeaderBoard isLeaderBoard",isLeaderBoard == 'false')
-  setIsTabVisible(isLeaderBoard == 'true')
-    })()
-  },[])
-  console.log("isTabVisible isTabVisible",isTabVisible)
   const GetUser = useMutation({
     mutationFn: api.GetUser,
     onSuccess: async (data) => {
@@ -149,6 +139,16 @@ const Settings = ({ navigation, route }) => {
     },
   });
 
+  useEffect(() => {
+    const getLocalUser = async() => {
+      const localUser = await AsyncStorage.getItem("user");
+      const userParse = JSON.parse(localUser)
+      setStorageUser(userParse)
+    }
+    if(isFocused){
+      getLocalUser() 
+    }
+  },[isFocused])
   const PaymentMethodIntent = useMutation({
     mutationFn: api.SubscriptionIntent,
     onSuccess: async (data, variables) => {
@@ -186,8 +186,15 @@ const Settings = ({ navigation, route }) => {
   };
 
   const handleLogout = async () => {
+    const getDayName = () => {
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const today = new Date();
+      return days[today.getDay()];
+    };
     try {
       await AsyncStorage.removeItem("user");
+      await AsyncStorage.removeItem('@user_steps');
+      await AsyncStorage.removeItem(getDayName());
       queryClient?.clear();
       console.log("User data removed from AsyncStorage");
       setUser({});
@@ -244,11 +251,11 @@ const Settings = ({ navigation, route }) => {
   const handleAboutUs = () => {
     setIsModalShown(true);
   };
-const handleToggleLeaderBoard = async () => {
-  const isLeaderBoard = await AsyncStorage.getItem("isLeaderBoardShown");
-  await AsyncStorage.setItem("isLeaderBoardShown", isLeaderBoard == 'false' ? 'true' : 'false');
-  RNRestart?.Restart();
-}
+// const handleToggleLeaderBoard = async () => {
+//   const isLeaderBoard = await AsyncStorage.getItem("isLeaderBoardShown");
+//   await AsyncStorage.setItem("isLeaderBoardShown", isLeaderBoard == 'false' ? 'true' : 'false');
+//   RNRestart?.Restart();
+// }
   const handleButton = (type) => {
     console.log({ type });
     switch (type) {
@@ -270,14 +277,19 @@ const handleToggleLeaderBoard = async () => {
       case "About Us":
         handleAboutUs();
         break;
-      case "Show Leader Board":
-        handleToggleLeaderBoard();
-        break;
+      case "Account Info":
+        handleUserAccountInfo();
       default:
         break;
     }
   };
-
+const handleUserAccountInfo = () => {
+  navigation.navigate("AdminDashboardScreens", {
+    screen: "UserDetailScreen",
+    params: { userData:storageUser },
+  })
+  console.log("user acc info called")
+}
   const handlePaymentMethodstUI = async () => {
     const { error } = await presentPaymentSheet();
 
@@ -345,16 +357,16 @@ const handleToggleLeaderBoard = async () => {
         >
           <View style={{ alignItems: "center" }}>
             <View style={styles.avatar_container}>
-              <Image style={styles.avatar} source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/avatar.png'}} />
+              <Image style={styles.avatar} source={require('../../../assets/image/avatar.png')} />
             </View>
             <Text
-              label={`${user?.data?.name} ${user?.data?.surname}`}
+              label={`${storageUser?.name} ${storageUser?.surname}`}
               size="xl_2"
               font="semibold"
               style={{ textAlign: "center" }}
             />
             <Text
-              label={user?.data?.email}
+              label={storageUser?.email}
               size="base"
               font="medium"
               style={{ textAlign: "center" }}
@@ -416,7 +428,13 @@ const handleToggleLeaderBoard = async () => {
             </Button>
           ) : null}
 
-          <View style={{ gap: 8 }}>
+          <View style={{ gap: 8,
+         display:'flex',
+         flex:1,
+         justifyContent:'space-between',
+
+          }}>
+            <View>
             {option
               .filter((option) =>
                 Object.keys(user?.data || {}).length !== 0 &&
@@ -433,11 +451,22 @@ const handleToggleLeaderBoard = async () => {
                     onPress={() => handleButton(type.label)}
                     disabled={isPaymentLoading}
                   >
+                    <View style={{width:'100%', height:62, display:'flex',}}>
                     <View
                       style={{
-                        flex: 1,
+                        display:'flex',
                         flexDirection: "row",
-                        justifyContent: "space-between",
+                       backgroundColor:'#ffffff',
+                        width:'100%',
+                        height:62,
+                        paddingLeft:8,                     
+                      borderRadius:12,
+                        elevation: 10, // Increase elevation for a stronger shadow effect on Android
+                        shadowColor: 'rgba(104, 66, 255, 0.5)', // Color of the shadow
+                        shadowOffset: { width: 4, height: 6 }, // Shadow offset to give depth
+                        shadowOpacity: 0.7, // Increase opacity for a more prominent shadow
+                        shadowRadius: 12, // Larger blur radius for a soft 3D effect
+                      
                       }}
                     >
                       <View
@@ -445,7 +474,7 @@ const handleToggleLeaderBoard = async () => {
                           flex: 1,
                           flexDirection: "row",
                           alignItems: "center",
-                          gap: 12,
+                          gap: 16,
                         }}
                       >
                         <type.icon
@@ -453,7 +482,7 @@ const handleToggleLeaderBoard = async () => {
                           size={28}
                         />
                         <Text
-                          label={type.label == "Show Leader Board" ? !!isTabVisible ? 'Hide Leader Board' : "Show Leader Board"  : type.label}
+                          label={type.label}
                           size="xl"
                           font="medium"
                           style={{
@@ -464,11 +493,12 @@ const handleToggleLeaderBoard = async () => {
                       </View>
                       {type.child ? (
                         !showSubs ? (
-                          <ChevronRight color="black" size={24} />
+                          <ChevronRight style={{alignSelf:'center'}} color="black" size={24} />
                         ) : (
-                          <ChevronDown color="black" size={24} />
+                          <ChevronDown style={{alignSelf:'center'}} color="black" size={24} />
                         )
                       ) : null}
+                    </View>
                     </View>
                   </Button>
                   {type.child && showSubs
@@ -522,6 +552,57 @@ const handleToggleLeaderBoard = async () => {
                     : null}
                 </>
               ))}
+              </View>
+               <Button
+                    key={`3-Logout`}
+                    variant="outline"
+                    style={styles.btn_container}
+                    onPress={() => handleButton('Logout')}
+                    // disabled={isPaymentLoading}
+                  >
+                    <View style={{width:'100%', height:62, display:'flex',}}>
+                    <View
+                      style={{
+                        display:'flex',
+                        flexDirection: "row",
+                       backgroundColor:'#ffffff',
+                        width:'100%',
+                        height:62,
+                        paddingLeft:8,                     
+                      borderRadius:12,
+                        elevation: 10, // Increase elevation for a stronger shadow effect on Android
+                        shadowColor: 'rgba(104, 66, 255, 0.5)', // Color of the shadow
+                        shadowOffset: { width: 4, height: 6 }, // Shadow offset to give depth
+                        shadowOpacity: 0.7, // Increase opacity for a more prominent shadow
+                        shadowRadius: 12, // Larger blur radius for a soft 3D effect
+                      
+                      }}
+                    >
+                      <View
+                        style={{
+                          flex: 1,
+                          flexDirection: "row",
+                          alignItems: "center",
+                          gap: 16,
+                        }}
+                      >
+                        <Logout
+                          color={"red" }
+                          size={28}
+                        />
+                        <Text
+                          label={"Logout"}
+                          size="xl"
+                          font="medium"
+                          style={{
+                            textAlign: "center",
+                            color:  "red" ,
+                          }}
+                        />
+                      </View>
+                    </View>
+                    </View>
+                  </Button>
           </View>
           <AboutModal
             isModalShown={isModalShown}
@@ -554,8 +635,11 @@ const styles = StyleSheet.create({
   btn_container: {
     borderColor: "transparent",
     borderRadius: 8,
-    height: 58,
+    width:'60%',
+    alignSelf:'center',
+    height: 62,
     justifyContent: "flex-start",
+    marginBottom:6,
   },
   avatar: { width: 145, height: 145, borderRadius: 100 },
   avatar_container: {
@@ -612,7 +696,7 @@ const styles = StyleSheet.create({
   },
   logo_container: {
     width: "100%",
-    height: 125,
+    height: 150,
   },
   logo: {
     height: "65%",

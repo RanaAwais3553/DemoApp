@@ -15,9 +15,10 @@ import { Play } from "../../components/icons";
 
 
 const Header = ({ title, subtitle }) => {
+  console.log("header begginner and advance is:#@#@",title,subtitle)
   return (
     <View style={styles.header.imgContainer}>
-      <ImageBackground source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/dive.jpg'}} style={styles.header.image}>
+      <ImageBackground source={require('../../../assets/image/dive.jpg')} style={styles.header.image}>
         <View style={styles.header.textContianer}>
           <View style={{ gap: 4 }}>
             <Text
@@ -96,7 +97,7 @@ const Card = ({ title, category, equipment, img, onPress, sets, distanceTime, we
       disabled={overdue}
     >
       <ImageBackground
-        source={{uri:img}}
+        source={img}
         style={styles.card.image}
         imageStyle={styles.card.imageStyle}
       >
@@ -168,42 +169,41 @@ const Workout = ({ navigation, route }) => {
   const weeklyReps = route.params?.weeklyReps;
   console.log({ exercises, day, weeklyReps });
   const levelCounts = {};
-console.log("exercise list and total number for each day:#@#@#",exercises?.length)
+console.log("exercise list and total number for each day:#@#@#",exercises)
   useEffect(() => {
     // Import all images from the exercise directory dynamically
-    // const importAll = (r) => r.keys().map(r);
-    // const images = importAll(require.context('../../components/image/excercise', false, /\.(png|jpg)$/));
-    const imagesArray = [
-      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/001.jpg",
-      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/002.jpg",
-      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/003.jpg",
-      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/004.jpg",
-      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/005.jpg",
-      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/006.jpg",
-      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/007.jpg",
-      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3854.jpg",
-      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3856.jpg",
-      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3858.jpg",
-      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3862.jpg",
-      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3866.jpg",
-      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3867.jpg",
-      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3871.jpg",
-      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3874.jpg",
-      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/janis_photo_legs.png",
-      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/luis_push_dd.png",
-      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/luis_push.png",
-      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/Photo_Cardio_ee.png",
-      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/photo_core_a.PNG",
-      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/photo_legs_ii.png",
-      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/photo_pull_b.PNG",
-      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/photo_push_b.PNG",
-      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/Photo_Push_bb.png",
-      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/photo_push_f.PNG",
-      "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/photo_push_g.png"
-    ]
+    const importAll = (r) => r.keys().map(r);
+    const images = importAll(require.context('../../../assets/image/excercise', false, /\.(png|jpg)$/));
+    // const imagesArray = [
+    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/001.jpg",
+    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/002.jpg",
+    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/003.jpg",
+    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/004.jpg",
+    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/005.jpg",
+    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/006.jpg",
+    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/007.jpg",
+    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3854.jpg",
+    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3856.jpg",
+    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3858.jpg",
+    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3862.jpg",
+    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3866.jpg",
+    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3867.jpg",
+    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3871.jpg",
+    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3874.jpg",
+    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/janis_photo_legs.png",
+    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/luis_push_dd.png",
+    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/luis_push.png",
+    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/Photo_Cardio_ee.png",
+    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/photo_core_a.PNG",
+    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/photo_legs_ii.png",
+    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/photo_pull_b.PNG",
+    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/photo_push_b.PNG",
+    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/Photo_Push_bb.png",
+    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/photo_push_f.PNG",
+    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/photo_push_g.png"
+    // ]
     // Shuffle the images randomly
-    const shuffledImages = shuffleArray(imagesArray);
-
+    const shuffledImages = shuffleArray(images);
     // Set the shuffled images in state
     setExerciseImages(shuffledImages);
   }, []);
@@ -232,8 +232,8 @@ console.log("exercise list and total number for each day:#@#@#",exercises?.lengt
 
   console.log({ exercisesLevel, lv: Level[exercisesLevel] });
 
-  const handleWorkoutCard = (link) => {
-    console.log(link);
+  const handleWorkoutCard = (link,exercise) => {
+    console.log("exercise object to see videw url",exercise);
     navigation.navigate("AppScreens", {
       screen: "WorkoutVideoScreen",
       params: {
@@ -267,7 +267,7 @@ console.log("exercise list and total number for each day:#@#@#",exercises?.lengt
               sets={exercise.sets}
               distanceTime={exercise.distanceTime}
               weeklyReps={weeklyReps}
-              onPress={() => handleWorkoutCard(exercise.videoUrl)}
+              onPress={() => handleWorkoutCard(exercise.videoUrl,exercise)}
             />
           ))}
         </View>

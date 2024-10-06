@@ -15,10 +15,10 @@
 		7699B88040F8A987B510C191 /* libPods-AwesomeProject-AwesomeProjectTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-AwesomeProject-AwesomeProjectTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8D37340B2596375A9B7D2B53 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = D77D0933BE803D9A4CDCAB36 /* PrivacyInfo.xcprivacy */; };
+		C52BC8B92CB2841500742521 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = C52BC8B82CB2841500742521 /* main.jsbundle */; };
 		C54C5A9A2C79B86400CA6FAB /* StepCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54C5A992C79B86400CA6FAB /* StepCounter.swift */; };
 		C54C5AAC2C79CBDB00CA6FAB /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C54C5AAB2C79CBDB00CA6FAB /* SwiftUI.framework */; };
 		C54C5AAE2C79CC1D00CA6FAB /* StepCounter.m in Sources */ = {isa = PBXBuildFile; fileRef = C54C5AAD2C79CC1D00CA6FAB /* StepCounter.m */; };
-		C57D6E582C9B558E00929BED /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = C57D6E572C9B558E00929BED /* main.jsbundle */; };
 		D26A23212C5A380C005138D0 /* FontAwesome6_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D2DEB67A2C59A4C5005496B2 /* FontAwesome6_Regular.ttf */; };
 		D26A23232C5A380C005138D0 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D2DEB67C2C59A4C5005496B2 /* FontAwesome5_Brands.ttf */; };
 		D26A23242C5A380C005138D0 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D2DEB67D2C59A4C5005496B2 /* MaterialCommunityIcons.ttf */; };
@@ -59,6 +59,7 @@
 		5DCACB8F33CDC322A6C60F78 /* libPods-AwesomeProject.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AwesomeProject.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = AwesomeProject/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-AwesomeProject-AwesomeProjectTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AwesomeProject-AwesomeProjectTests.release.xcconfig"; path = "Target Support Files/Pods-AwesomeProject-AwesomeProjectTests/Pods-AwesomeProject-AwesomeProjectTests.release.xcconfig"; sourceTree = "<group>"; };
+		C52BC8B82CB2841500742521 /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = text; name = main.jsbundle; path = AwesomeProject/main.jsbundle; sourceTree = "<group>"; };
 		C54C5A982C79B86400CA6FAB /* AwesomeProject-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AwesomeProject-Bridging-Header.h"; sourceTree = "<group>"; };
 		C54C5A992C79B86400CA6FAB /* StepCounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepCounter.swift; sourceTree = "<group>"; };
 		C54C5A9B2C79C8EA00CA6FAB /* libReact-RCTAnimation.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libReact-RCTAnimation.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,7 +74,6 @@
 		C54C5AAD2C79CC1D00CA6FAB /* StepCounter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StepCounter.m; sourceTree = "<group>"; };
 		C54C5AAF2C7A12F100CA6FAB /* React */ = {isa = PBXFileReference; lastKnownFileType = folder; name = React; path = "../node_modules/react-native/React"; sourceTree = "<group>"; };
 		C54C5AB12C7A1A6400CA6FAB /* libReactCommon.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReactCommon.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		C57D6E572C9B558E00929BED /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = text; name = main.jsbundle; path = AwesomeProject/main.jsbundle; sourceTree = "<group>"; };
 		D2DEB6772C59A4C5005496B2 /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontisto.ttf; sourceTree = "<group>"; };
 		D2DEB6782C59A4C5005496B2 /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Octicons.ttf; sourceTree = "<group>"; };
 		D2DEB6792C59A4C5005496B2 /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Feather.ttf; sourceTree = "<group>"; };
@@ -181,7 +181,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				C57D6E572C9B558E00929BED /* main.jsbundle */,
+				C52BC8B82CB2841500742521 /* main.jsbundle */,
 				C54C5AAD2C79CC1D00CA6FAB /* StepCounter.m */,
 				C54C5A992C79B86400CA6FAB /* StepCounter.swift */,
 				D2DEB6762C59A4C5005496B2 /* Fonts */,
@@ -338,7 +338,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C57D6E582C9B558E00929BED /* main.jsbundle in Resources */,
+				C52BC8B92CB2841500742521 /* main.jsbundle in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				8D37340B2596375A9B7D2B53 /* PrivacyInfo.xcprivacy in Resources */,
@@ -578,7 +578,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 34;
+				CURRENT_PROJECT_VERSION = 36;
 				DEVELOPMENT_TEAM = K84L248M79;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = AwesomeProject/Info.plist;
@@ -589,7 +589,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.34;
+				MARKETING_VERSION = 1.0.36;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -611,7 +611,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 34;
+				CURRENT_PROJECT_VERSION = 36;
 				DEVELOPMENT_TEAM = K84L248M79;
 				INFOPLIST_FILE = AwesomeProject/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Fit Space Hub";
@@ -621,7 +621,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.34;
+				MARKETING_VERSION = 1.0.36;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

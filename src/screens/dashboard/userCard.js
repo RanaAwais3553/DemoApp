@@ -5,7 +5,7 @@ const UserCard = ({ name, phone, gender, onDelete,userData,handleNavigation }) =
   return (
     <TouchableOpacity onPress={() => handleNavigation(userData)} style={styles.card}>
          <View style={styles.avatar_container}>
-              <Image style={styles.avatar} source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/avatar.png'}} />
+              <Image style={styles.avatar} source={require('../../../assets/image/avatar.png')} />
             </View>
      
       <View style={styles.infoContainer}>

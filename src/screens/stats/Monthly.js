@@ -13,10 +13,11 @@ import {
   } from "react-native-chart-kit";
 import MultiDateSelectionCalendar from "../../components/steps_components/MultiDateCalender";
 import GetUserSteps from '../../api/getSteps'
+import { useIsFocused } from '@react-navigation/native';
   let dailyTargetedSteps = 810;
   const Monthly = () => {
     const [stepsDate, setStepsDate] = useState(null);
-  
+    const isFocused = useIsFocused();
   useEffect(() => {
     const getUserId = async () => {
       const userData = await AsyncStorage.getItem("user");
@@ -29,25 +30,28 @@ const getUserSteps = async () => {
   const userData = await getUserId();
   if(userData?._id){ 
   const responseData = await GetUserSteps(userData?._id);
-  console.log("user steps in monthly calander",responseData)
+  
   if(responseData && responseData?.length > 0){ 
   const dateNumbers = responseData?.reduce((acc, item) => {
     const dateKey = item.date.split('T')[0]; // Get the date part (YYYY-MM-DD)
     acc[dateKey] = item.steps; // Assign steps to the date key
     return acc;
   }, {});
+  console.log("user steps in monthly calander",responseData,dateNumbers)
   setStepsDate(dateNumbers);
 }
   }
 
 }
-getUserSteps()
-  },[])
+if(isFocused){
+  getUserSteps()
+}
+  },[isFocused])
   
     return (
       <>
       <SafeAreaView style={styles.container}>
- {stepsDate && stepsDate?.length > 0 ? <ScrollView showsVerticalScrollIndicator={false} style={{display:'flex',flexGrow:1}} contentContainerStyle={{display:'flex',flexGrow:1,justifyContent:'center',alignItems:'center'}}>
+ {!!stepsDate ? <ScrollView showsVerticalScrollIndicator={false} style={{display:'flex',flexGrow:1}} contentContainerStyle={{display:'flex',flexGrow:1,justifyContent:'center',alignItems:'center'}}>
    
     <View style={{display:'flex',flex:1}}>
       <MultiDateSelectionCalendar stepsDate = {stepsDate}/>

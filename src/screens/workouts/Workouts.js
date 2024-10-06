@@ -20,7 +20,7 @@ const Banner = () => {
   return (
     <View style={styles.banner.imgContainer}>
       <ImageBackground
-        source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/logo-black.png'}}
+        source={require('../../../assets/image/logo-black.png')}
         style={styles.banner.image}
         imageStyle={styles.banner.imageStyle}
       />

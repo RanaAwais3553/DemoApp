@@ -8,14 +8,28 @@ const Axios = axios.create({
 
 
 const UserUpdate = async (params) => {
-  console.log("user updated data:#@#@#@",params)
-  const res = await Axios.put("/users/update", params);
-  console.log("user updated data after API call:#@#@#@",res)
-  return res.data;
-};
+  const formData = new FormData();
+  let finalParam;
+  if (params instanceof FormData) {
+    finalParam = params;
+    console.log("This is a FormData object");
+  } else {
+    for (const key in params) {
+      if (params.hasOwnProperty(key)) {
+        formData.append(key, params[key]);
+      }
+    }
+    finalParam = formData
+  }
+// Append each key-value pair from the object to the FormData
 
-const UserUpdateWorkoutWeek = async (params) => {
-  const res = await Axios.put("/users/update", params);
+  console.log("user updated data isx:#@#@#@",finalParam,API_BASE)
+  const res = await Axios.put("/users/update", finalParam,{
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  console.log("user updated data after API call:#@#@#@",res)
   return res.data;
 };
 

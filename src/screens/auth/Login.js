@@ -37,7 +37,7 @@ import {
   Message,
 } from "../../components/icons";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import {EXPO_PUBLIC_API_URL} from '@env'
+// import {EXPO_PUBLIC_API_URL} from '@env'
 
 const SSO_btn = [
   { name: "Facebook", icon: Facebook },
@@ -72,7 +72,7 @@ console.log("error loggin API",error)
   const handleSSO = (type) => {
     console.log({ sso: type });
   };
-console.log("in login.js file env data is:$##@#@",EXPO_PUBLIC_API_URL,process.env.EXPO_PUBLIC_API_URL)
+// console.log("in login.js file env data is:$##@#@",EXPO_PUBLIC_API_URL,process.env.EXPO_PUBLIC_API_URL)
   const validationSchema = Yup.object({
     email: Yup.string()
       .email("Enter a valid email")
@@ -166,7 +166,7 @@ console.log("in login.js file env data is:$##@#@",EXPO_PUBLIC_API_URL,process.en
               
             ]}
           >
-            <Image style={styles.logo} source={{uri:'https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/logo-black.png'}} />
+            <Image style={styles.logo} resizeMode="cover" source={require('../../../assets/image/logo-black.png')} />
           </View>
           <Text label="Login to your Account" size="xl_6" font="bold" />
 
@@ -316,8 +316,9 @@ const styles = StyleSheet.create({
     alignContent: "center",
   },
   logo_container: {
+    display:'flex',
     width: "100%",
-    height: 100,
+    height: 150,
   },
   logo: {
     height: "75%",
