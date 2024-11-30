@@ -129,6 +129,7 @@ const Settings = ({ navigation, route }) => {
   const [showSubs, setShowSubs] = useState(false);
   const [isPaymentLoading, setPaymentLoading] = useState(false);
   const [isModalShown, setIsModalShown] = useState(false);
+  const [imageProfile, setProfileImage] = useState(null)
     const [storageUser , setStorageUser] = useState(null)
   const { initPaymentSheet, presentPaymentSheet } = usePaymentSheet();
   const GetUser = useMutation({
@@ -144,6 +145,12 @@ const Settings = ({ navigation, route }) => {
       const localUser = await AsyncStorage.getItem("user");
       const userParse = JSON.parse(localUser)
       setStorageUser(userParse)
+      if(userParse?.avatar){
+      const fullPath = userParse?.avatar
+const index = fullPath?.indexOf('/uploads/');
+const extractedPath = fullPath?.substring(index + 1);
+setProfileImage(`http://54.253.2.145:3000/${extractedPath}`)
+      }
     }
     if(isFocused){
       getLocalUser() 
@@ -357,7 +364,8 @@ const handleUserAccountInfo = () => {
         >
           <View style={{ alignItems: "center" }}>
             <View style={styles.avatar_container}>
-              <Image style={styles.avatar} source={require('../../../assets/image/avatar.png')} />
+
+              {imageProfile ? <Image style={styles.avatar} source={{uri:imageProfile}} /> : <Image style={styles.avatar} source={require('../../../assets/image/avatar.png')} />}
             </View>
             <Text
               label={`${storageUser?.name} ${storageUser?.surname}`}

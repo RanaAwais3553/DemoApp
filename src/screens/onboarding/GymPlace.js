@@ -9,7 +9,7 @@ import { Button, Text } from "../../components/ui";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const PlaceType = [
-  { name: "Home Gym", value: "homeGym" },
+  // { name: "Home Gym", value: "homeGym" },
   { name: "Commercial Gym", value: "commercialGym" },
   { name: "Small Gym", value: "smallGym" },
   { name: "Crossfit Style Gym", value: "crossfitGym" },

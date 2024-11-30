@@ -55,7 +55,7 @@ const Header = ({ title, subtitle }) => {
   );
 };
 
-const Card = ({ title, category, equipment, img, onPress, sets, distanceTime, weeklyReps ,overdue  }) => {
+const Card = ({ title, category, equipment, img, onPress, sets, distanceTime, weeklyReps ,overdue,rep1,rep2,rep3  }) => {
   
 
   /*const capitalizeFirstLetter = (string) => {
@@ -77,18 +77,16 @@ const Card = ({ title, category, equipment, img, onPress, sets, distanceTime, we
 
   let exerciseTimePeriod;
   
-  if (distanceTime) {
+  if (distanceTime && !!!rep1) {
     // Check if the distanceTime contains both numbers and non-numeric characters
-    if (/\d/.test(distanceTime) && !isNumeric(distanceTime)) {
-        exerciseTimePeriod = `Perform exercise for ${distanceTime} seconds 4 sets`;
-    } else if (isNumeric(distanceTime)) {
-        exerciseTimePeriod = `Perform exercise for ${distanceTime} seconds 4 sets`;
+    if (/\d/.test(distanceTime) && !isNumeric(distanceTime) && !!!rep1) {
+        exerciseTimePeriod = `Perform exercise for ${distanceTime} seconds ${sets} sets`;
+    } else if (isNumeric(distanceTime) && !!!rep1) {
+        exerciseTimePeriod = `Perform exercise for ${distanceTime} seconds ${sets} sets`;
     } 
   } else {
-        exerciseTimePeriod = weeklyReps;
+        exerciseTimePeriod = `${rep1} Reps ${sets} sets`;
   }
-
-
   return (
     <TouchableOpacity
       activeOpacity={0.9}
@@ -122,17 +120,11 @@ const Card = ({ title, category, equipment, img, onPress, sets, distanceTime, we
             )}
             <View>
               <Text
-                label={`${exerciseTimePeriod} ${sets} sets`}
+                label={`${exerciseTimePeriod}`}
                 font="medium"
                 style={{ color: "#fff", lineHeight: 20 }}
               />
-              {/* {!distanceTime &&(
-              <Text
-                label={`${sets} sets`}
-                font="medium"
-                style={{ color: "#fff", lineHeight: 20, marginLeft: 10 }}
-              />
-              )} */}
+             
             </View>
           </View>
         </View>
@@ -169,42 +161,10 @@ const Workout = ({ navigation, route }) => {
   const weeklyReps = route.params?.weeklyReps;
   console.log({ exercises, day, weeklyReps });
   const levelCounts = {};
-console.log("exercise list and total number for each day:#@#@#",exercises)
   useEffect(() => {
-    // Import all images from the exercise directory dynamically
     const importAll = (r) => r.keys().map(r);
     const images = importAll(require.context('../../../assets/image/excercise', false, /\.(png|jpg)$/));
-    // const imagesArray = [
-    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/001.jpg",
-    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/002.jpg",
-    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/003.jpg",
-    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/004.jpg",
-    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/005.jpg",
-    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/006.jpg",
-    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/007.jpg",
-    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3854.jpg",
-    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3856.jpg",
-    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3858.jpg",
-    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3862.jpg",
-    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3866.jpg",
-    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3867.jpg",
-    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3871.jpg",
-    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/IMG_3874.jpg",
-    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/janis_photo_legs.png",
-    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/luis_push_dd.png",
-    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/luis_push.png",
-    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/Photo_Cardio_ee.png",
-    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/photo_core_a.PNG",
-    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/photo_legs_ii.png",
-    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/photo_pull_b.PNG",
-    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/photo_push_b.PNG",
-    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/Photo_Push_bb.png",
-    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/photo_push_f.PNG",
-    //   "https://fitspace-app-assets.s3.ap-southeast-2.amazonaws.com/image/excercise/photo_push_g.png"
-    // ]
-    // Shuffle the images randomly
     const shuffledImages = shuffleArray(images);
-    // Set the shuffled images in state
     setExerciseImages(shuffledImages);
   }, []);
 
@@ -267,6 +227,9 @@ console.log("exercise list and total number for each day:#@#@#",exercises)
               sets={exercise.sets}
               distanceTime={exercise.distanceTime}
               weeklyReps={weeklyReps}
+              rep1 = {exercise.rep1}
+              rep2 = {exercise.rep2}
+              rep3 = {exercise.rep3}
               onPress={() => handleWorkoutCard(exercise.videoUrl,exercise)}
             />
           ))}

@@ -1,9 +1,10 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import { View,Alert, Text, TouchableOpacity, StyleSheet,Image, Dimensions, TextInput, ActivityIndicator } from 'react-native';
 import UserUpdate from '../../api/user-update'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useQueryClient } from '@tanstack/react-query';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 const UserDetailScreen = ({navigation,route}) => {
   const queryClient = useQueryClient();
     const {userData} = route?.params
@@ -14,7 +15,17 @@ const UserDetailScreen = ({navigation,route}) => {
     const [gender,setGender] = useState(userData?.gender)
     const [isLoading,setIsLoading] = useState(false);
     const [profileImage, setProfileImage] = useState(null);
-
+    const [bio,setBio] = useState(userData?.bio)
+    const [age,setAge] = useState(userData?.age)
+    useEffect(() => {
+      if(userData?.avatar){
+        const fullPath = userData?.avatar
+const index = fullPath?.indexOf('/uploads/');
+const extractedPath = fullPath?.substring(index + 1);
+console.log("extract image path is:#@#@",extractedPath)
+setProfileImage({uri:`http://54.253.2.145:3000/${extractedPath}`})
+      }
+    },[])
     // Function to launch the camera
     const handleLaunchCamera = () => {
       const options = {
@@ -55,7 +66,7 @@ const UserDetailScreen = ({navigation,route}) => {
         }
       });
     };
-  console.log("profile image is:##@#@",profileImage)
+  console.log("profile image is:##@#@",profileImage?.uri,userData?.avatar)
     // Function to update user image
     const handleUpdateImage = async () => {
       if (!profileImage) {
@@ -83,7 +94,7 @@ const UserDetailScreen = ({navigation,route}) => {
       }
     };
   
-    console.log("route.params.userData",userData);
+    // console.log("route.params.userData",userData);
     const handleUpdateProfile = async() => {
       setIsLoading(true)
       const data = {
@@ -99,6 +110,8 @@ const UserDetailScreen = ({navigation,route}) => {
       formData.append('surname', surname); // Add user ID
       formData.append('email', email); // Add user ID
       formData.append('gender', gender); // Add user ID
+      formData.append('age', age); // Add user ID
+      formData.append('bio', bio); // Add user ID
      if(profileImage?.uri){ 
       formData.append('profileImage', {
         uri: profileImage.uri,
@@ -156,6 +169,7 @@ const UserDetailScreen = ({navigation,route}) => {
   }
   const profileData = () => {
     return(
+      
       <View style={{display:'flex',borderTopWidth:1,borderColor:'#e0e0e0', padding:22,backgroundColor:'#ffffff',elevation:3,width:'100%'}}>
     <View style={{display:'flex',flexDirection:'row',width:'100%',alignItems:'center'}}>
       <View style={{display:'flex',width:'30%',paddingBottom:12}}>
@@ -176,23 +190,12 @@ const UserDetailScreen = ({navigation,route}) => {
       </View>
 
 
-      {/* <View style={{display:'flex',flexDirection:'row', width:'100%',alignItems:'center'}}>
-      <View style={{display:'flex',width:'30%',paddingBottom:12,flexDirection:'row',alignItems:'center'}}>
-      <Text style={{...styles.nameText,fontSize:24}}>Date of</Text>
-      <View>
-        <Text style={{...styles.nameText,fontSize:24}}>{" "}birth</Text>
-      </View>
-      </View>
-      <View style={{display:'flex',width:'70%'}}>
-        <TextInput editable={isEditable} style={{borderBottomWidth:1,borderBottomColor:'#e0e0e0',fontSize:16, paddingBottom:12,color:isEditable ? "#121212" : "#a3a2a2"}}/>
-      </View>
-      </View> */}
         <View style={{display:'flex',flexDirection:'row',paddingVertical:12, width:'100%',alignItems:'center'}}>
       <View style={{display:'flex',width:'30%',paddingBottom:12}}>
-      <Text style={styles.nameText}>Date of</Text>
+      <Text style={styles.nameText}>Date of birth</Text>
       </View>
       <View style={{display:'flex',width:'70%'}}>
-        <TextInput placeholder='birth' placeholderTextColor={"#a3a2a2"} editable={false} style={{borderBottomWidth:1,borderBottomColor:'#e0e0e0',fontSize:16, paddingBottom:12,color:"#a3a2a2"}}/>
+        <TextInput placeholder='12-12-1997' value={age} maxLength={10} onChangeText={setAge} placeholderTextColor={"#a3a2a2"} editable={true} style={{borderBottomWidth:1,borderBottomColor:'#e0e0e0',fontSize:16, paddingBottom:12,color:"#121212",paddingStart:12}}/>
       </View>
       </View>
 
@@ -202,7 +205,7 @@ const UserDetailScreen = ({navigation,route}) => {
       <Text style={{...styles.nameText,marginBottom:0}}>Bio</Text>
       </View>
       <View style={{display:'flex',width:'70%'}}>
-        <TextInput editable={isEditable} style={{fontSize:16}} placeholder='Bio' placeholderTextColor={"#b8b6b6"}/>
+        <TextInput editable={isEditable} value={bio} onChangeText={setBio} style={{fontSize:16}} placeholder='Bio' placeholderTextColor={"#b8b6b6"}/>
       </View>
       </View>
 
@@ -226,10 +229,12 @@ const UserDetailScreen = ({navigation,route}) => {
       </View>
       </View>
       </View>
+     
     )
   }
     return (
     <View style={styles.container}>
+      <KeyboardAwareScrollView style={{}} bounces={true}  showsVerticalScrollIndicator={false}>
       {headerContainer()}
         {profileImageJsx()}
         {profileData()}
@@ -237,6 +242,7 @@ const UserDetailScreen = ({navigation,route}) => {
         <View style={{height:Dimensions.get("screen").height,width:'100%',left:0,right:0,top:0,bottom:0}}>
           <ActivityIndicator size={"large"} color={"#7e9ff2"}/>
         </View>}
+        </KeyboardAwareScrollView>
     </View>
   );
 };

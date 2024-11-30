@@ -29,7 +29,7 @@ const Banner = ({ week, day, excercise }) => {
   const currentDate = moment().format("dddd, MMMM DD, YYYY");
   const [currentWeek, setCurrentWeek] = useState();
   // console.log(`Banner week ${currentWeek}`);
-
+console.log("current week in home screen",week)
   useEffect(() => {
     setCurrentWeek(week);
   }, [week]);
@@ -285,7 +285,7 @@ const [setToggleState,toggleState] = useState({day1:false,day2:true,day3:false})
     },
     []
   );
-
+console.log("week number from API",workoutweek)
   const handleOnboarding = () => {
     navigation.navigate("OnboardingScreens", {
       screen: "GenderScreen",
@@ -337,6 +337,7 @@ const [setToggleState,toggleState] = useState({day1:false,day2:true,day3:false})
       );
     } else {
       // Navigate to the WorkoutScreen if not overdue
+      console.log("weekly reps are:#@#@",weeklyReps)
       navigation.navigate("AppScreens", {
         screen: "WorkoutScreen",
         params: { exercises, day, weeklyReps },

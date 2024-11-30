@@ -8,13 +8,15 @@ const InputStorageComponent = ({setVisibleModel,steps}) => {
 
   // Function to store data into local storage
   const storeData = async (value) => {
-    const getDayName = () => {
-        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        const today = new Date();
-        return days[today.getDay()];
-      };
+    const getTodayDate = () => {
+      const today = new Date();
+      return today.toLocaleDateString('en-CA');
+    };
     try {
-      await AsyncStorage.setItem(getDayName(), value);
+      console.log("getTodayDate() inside storeDailyStepsGoal",getTodayDate())
+      await AsyncStorage.setItem('goalSteps', value);
+      await AsyncStorage.setItem('stepData', value);
+      await AsyncStorage.setItem('lastUpdatedDate', getTodayDate());
       console.log('Data stored successfully');
     } catch (error) {
       console.error('Error storing data:', error);

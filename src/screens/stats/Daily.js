@@ -24,6 +24,7 @@ import DistanceIcon from 'react-native-vector-icons/MaterialIcons';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import GetUserSteps from '../../api/getSteps';
 import { useIsFocused } from '@react-navigation/native';
+import CircleWithText from './CircularSVG'
   const Daily = () => {
     const progressRef = useRef(null);
     const isFocused = useIsFocused();
@@ -46,7 +47,7 @@ import { useIsFocused } from '@react-navigation/native';
 
   function getCurrentDate(){
     const today = new Date();
-    return today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+    return today.toLocaleDateString('en-CA'); // Format: YYYY-MM-DD
   };
 
   const loadStepsData = async () => {
@@ -90,7 +91,7 @@ try {
  const stepss = saveSteps + steps;
  const data = {
     "userId": userData?._id,
-    "date": savedDate,
+    "date": getCurrentDate(),
     "steps": stepss
  }
   const response = await StoreFootSteps(data);
@@ -130,23 +131,31 @@ try {
    useEffect(() => {
     const getGoalSteps = async () => {
       setIsLoading(true);
-      const getDayName = () => {
-        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const getTodayDate = () => {
         const today = new Date();
-        setCurrDay(days[today.getDay()])
-        return days[today.getDay()];
+        return today.toLocaleDateString('en-CA');
       };
-      const getGoalSteps = await AsyncStorage.getItem(getDayName());
+      const todayDate = getTodayDate();
+      const getGoalSteps = await AsyncStorage.getItem('goalSteps');
+      const getDailySteps = await AsyncStorage.getItem('lastUpdatedDate');
       console.log("getGoalSteps getGoalSteps",typeof getGoalSteps)
-      if(!!getGoalSteps){
-        console.log("goal steps are:#@#@",goalSteps,isLoading)
-        setGoalSteps(JSON.parse(getGoalSteps));
-      }else{
-        setVisibleModel(true);
-        setLocalStorageSteps(0);
-        setSteps(0);
-        await AsyncStorage.setItem(STEP_STORAGE_KEY, '0');
-      }
+          // Check if the stored date matches today's date
+          console.log("getDailySteps !== todayDate",getDailySteps , todayDate)
+          if (getDailySteps !== todayDate) {
+           await handleStoreFootSteps()
+            // New day - reset step count
+            setLocalStorageSteps(0);
+            setSteps(0);
+            await AsyncStorage.setItem(STEP_STORAGE_KEY, '0');
+            await AsyncStorage.setItem('lastUpdatedDate', todayDate); // Update the date in storage
+          }
+    
+          // Retrieve goal steps if it exists
+          if (getGoalSteps) {
+            setGoalSteps(JSON.parse(getGoalSteps));
+          } else {
+            setVisibleModel(true);
+          }
       setIsLoading(false)
       }
       if(isFocused){ 
@@ -156,8 +165,11 @@ try {
   useEffect(() => {
 (async() => {
   if(Number(steps) != 0){ 
-    const total = Number(localstorageSteps) + Number(steps);
+    const savedSteps = await AsyncStorage.getItem(STEP_STORAGE_KEY);
+        const parsedSteps = Number(savedSteps) || 0;
+    const total = parsedSteps + Number(steps);
   await AsyncStorage.setItem(STEP_STORAGE_KEY, total.toString());
+  console.log("steps are save:#@#@",total)
   }  
 })()
   },[steps])
@@ -165,15 +177,6 @@ try {
   useFocusEffect(() => {
     !isLoading && progressRef?.current && progressRef?.current.reAnimate();
   })
-  
-    const scaleValue = (x) => {
-      const minInput = 0;
-      const maxInput = 99999;
-      const minOutput = 0;
-      const maxOutput = 282;
-    
-      return x > 10 ? (x / maxInput) * maxOutput : 5;
-    };
 
     useEffect(() => {
       const getUserId = async () => {
@@ -187,7 +190,6 @@ try {
     const userData = await getUserId();
     if(userData?._id){ 
     const responseData = await GetUserSteps(userData?._id);
-    console.log("user steps in monthly calander",responseData)
     if(responseData && responseData?.length > 0){ 
       const last7Days = [
         { day: 'Monday', steps: 0 },
@@ -237,7 +239,18 @@ return goalSteps
   return 0
 }
 }
-    console.log("local storage steps are:#@#@", steps , localstorageSteps, goalSteps,isLoading,stepsDays)
+const IsSecondCircleVisible = () => {
+  if(!!steps || !!localstorageSteps){ 
+  if((steps + localstorageSteps) > goalSteps){
+return true
+  }else{
+    return false
+  }
+}else{
+  return false
+}
+}
+console.log("handleValueSteps",handleValueSteps(),steps + localstorageSteps,IsSecondCircleVisible())
     return (
       <>
       {!isLoading ? 
@@ -262,7 +275,9 @@ return goalSteps
     backgroundColor: 'white', // Optional: add a background color if needed
   }}
    onPress={() => setVisibleModel(true)}>
-   <CircularProgress
+   {/* {(!!goalSteps && goalSteps > 0 ) && (goalSteps > (steps + localstorageSteps)) ? */}
+   {/* <View style={{display:'flex',alignSelf:'center'}}> 
+    <CircularProgress
     ref={progressRef} 
   value={handleValueSteps()}
   radius={100}
@@ -289,7 +304,62 @@ return goalSteps
   subtitleColor="#3873d9"
   subtitleFontSize={10}
   subtitleStyle={{fontWeight:'bold'}}
-/>
+/> 
+<View style={{position:'absolute',left:-20,right:-20,top:-20,bottom:0}}>
+<CircleWithText steps={steps + localstorageSteps} goalSteps={goalSteps} currentDay ={currentDay} progressRef={progressRef}/>
+</View>
+ </View> */}
+
+<View style={{ alignSelf: 'center', position: 'relative' }}> 
+  {/* Outer Circular Progress */}
+  <CircularProgress
+    ref={progressRef} 
+    value={handleValueSteps()}
+    radius={100}
+    duration={2000}
+    progressValueColor={IsSecondCircleVisible() ? "transparent" : '#3873d9'}
+    maxValue={goalSteps} 
+    title={`${IsSecondCircleVisible() ? '' : currentDay}`}
+    inActiveStrokeOpacity={0.3}
+    activeStrokeColor={"#3873d9"}
+    inActiveStrokeColor="rgba(56, 115, 217, 1)"
+    inActiveStrokeWidth={32}
+    activeStrokeWidth={22}
+    progressValueStyle={{
+      color:  '#3873d9',
+      fontSize: 20,
+    }}
+    imageProps={IsSecondCircleVisible() ? null : <Steps/>}
+    titleFontSize={10}
+    titleColor={'#3873d9'}
+    titleStyle={{ fontWeight: 'bold' }}
+    subtitle={IsSecondCircleVisible() ? '' : ` Goal: ${goalSteps}`}
+    subtitleColor="#3873d9"
+    subtitleFontSize={10}
+    subtitleStyle={{ fontWeight: 'bold' }}
+  /> 
+
+  {/* Inner CircleWithText, positioned absolutely on top */}
+  {IsSecondCircleVisible() && <View style={{
+    position: 'absolute',
+    top: 0, // Align perfectly on top
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center', // Centers the content within the absolute position
+    alignItems: 'center',
+  }}>
+    <CircleWithText
+      steps={steps + localstorageSteps}
+      goalSteps={goalSteps}
+      currentDay={currentDay}
+      progressRef={progressRef}
+    />
+  </View>}
+</View>
+
+  {/* : */}
+{/* <CircleWithText steps={steps + localstorageSteps} goalSteps={goalSteps}/>} */}
 </TouchableOpacity>
 }
     </View>
@@ -297,9 +367,9 @@ return goalSteps
   <WaveChart currentDay = {currentDay} stepsDays = {stepsDays} isShowGraph = {isShowGraph}/>
     </View>
     {!isLoading && <View style={styles.stepsCardcontainer}>
-      <StepsCharts value={steps + localstorageSteps} maxValue={goalSteps} locationIcon = {<Icon name="fire" size={20} color={'#d13917'} /> } color={'#d13917'} distance={((steps + localstorageSteps) * 0.05).toFixed(2)} unite={"KCAL"} heading = {"CALORIES"} additionalInfo={((steps + localstorageSteps) * 0.05).toFixed(2)} />
-      <StepsCharts value={steps + localstorageSteps} maxValue={goalSteps} locationIcon = {<DistanceIcon name="location-on" size={20} color={'#25f52c'} />} color={'#25f52c'} distance={(((steps + localstorageSteps) * 0.78)/1000).toFixed(2)} unite={"KM"} heading = {"DISTANCE"} additionalInfo={(((steps + localstorageSteps) * 0.78)/1000).toFixed(2)} />
-      <StepsCharts value={steps + localstorageSteps} maxValue={goalSteps} locationIcon = {<DistanceIcon name="access-time" size={20} color={'#e9f02e'}/>} color={'#e9f02e'} distance={(((steps + localstorageSteps) * 0.78)/83.33).toFixed(2)} unite={"Minute"} heading = {"DURATION"} additionalInfo={(((steps + localstorageSteps) * 0.78)/83.33).toFixed(2)} />
+      <StepsCharts value={handleValueSteps()} maxValue={goalSteps} locationIcon = {<Icon name="fire" size={20} color={'#d13917'} /> } color={'#d13917'} distance={((steps + localstorageSteps) * 0.05).toFixed(2)} unite={"KCAL"} heading = {"CALORIES"} additionalInfo={((steps + localstorageSteps) * 0.05).toFixed(2)} />
+      <StepsCharts value={handleValueSteps()} maxValue={goalSteps} locationIcon = {<DistanceIcon name="location-on" size={20} color={'#25f52c'} />} color={'#25f52c'} distance={(((steps + localstorageSteps) * 0.78)/1000).toFixed(2)} unite={"KM"} heading = {"DISTANCE"} additionalInfo={(((steps + localstorageSteps) * 0.78)/1000).toFixed(2)} />
+      <StepsCharts value={handleValueSteps()} maxValue={goalSteps} locationIcon = {<DistanceIcon name="access-time" size={20} color={'#e9f02e'}/>} color={'#e9f02e'} distance={(((steps + localstorageSteps) * 0.78)/83.33).toFixed(2)} unite={"Minute"} heading = {"DURATION"} additionalInfo={(((steps + localstorageSteps) * 0.78)/83.33).toFixed(2)} />
     </View>}  
   </ScrollView>
       </SafeAreaView>

@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import { FlatList, SafeAreaView, StyleSheet,View,Text,Switch,Image, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { FlatList, SafeAreaView, StyleSheet,View,Alert, Text,Switch,Image, ActivityIndicator, TouchableOpacity } from 'react-native';
 import ExpandableUserCard from './ExpandableCard'; // Import the ExpandableUserCard component
 import LinearGradient from 'react-native-linear-gradient';
 import ReminderModal from './ReminderModal'
 import GetAllUserFootSteps from '../../api/getAllUserFootSteps'
-import GetCurrentUserFootSteps from '../../api/getCurrentUserFootSteps'
 import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuth } from "../../hooks";
@@ -17,6 +16,7 @@ const UserLeaderBoard = () => {
   const [isLoading , setIsLoading] = useState(true)
   const [storageUser,setStorageUser] = useState(null);
   const [isEnabled, setIsEnabled] = useState(false);
+  const [imageProfile , setProfileImage] = useState(null)
   const { user, setUser } = useAuth();
   const [currUserSteps , setCurrUserSteps] = useState(0)
   const isFocused = useIsFocused();
@@ -31,8 +31,9 @@ const getAllUserSteps = async() => {
   setIsLoading(true);
   setSortedList(null)
 const response = await GetAllUserFootSteps()
-console.log("response response steps:$#$#",response?.users)
 if(response?.users?.length > 0){
+  const currUserSteps = response?.users?.find((data) => data?.userId == user?.data?._id);
+  setCurrUserSteps(currUserSteps)
 const filteredData = response?.users.filter((data) => {
   if(data?.totalSteps < 200 && !!!data?.isToShowSteps){
     return true
@@ -43,8 +44,7 @@ const filteredData = response?.users.filter((data) => {
   }
 })
 if(filteredData?.length > 0){ 
-  console.log("filteredData filteredData",filteredData)
-  const sortedUsers = filteredData?.sort((a, b) => b.score - a.score);
+  const sortedUsers = filteredData?.sort((a, b) => b?.totalSteps - a?.totalSteps);
   setSortedList(sortedUsers)
 }
   setIsLoading(false)
@@ -54,29 +54,18 @@ if(filteredData?.length > 0){
 setIsLoading(false)
 }
 
-
-
-useEffect(() => {
-  console.log("user?.data?.id",user?.data?._id)
-const getCurrUserSteps = async() => {
-  if(user?.data?._id){ 
-const response =await GetCurrentUserFootSteps(user?.data?._id)
-console.log("response response user steps",response)
-if(response && response?.length > 0){ 
-setCurrUserSteps(response[0]?.totalSteps)
-}
-  }
-}
-if(isFocused){ 
-getCurrUserSteps()
-}
-},[isFocused])
 useEffect(() => {
   const getLocalUser = async() => {
     const localUser = await AsyncStorage.getItem("user");
     const userParse = JSON.parse(localUser)
     setIsEnabled(userParse?.isToShowSteps)
     setStorageUser(userParse)
+    if(userParse?.avatar){
+      const fullPath = userParse?.avatar
+const index = fullPath?.indexOf('/uploads/');
+const extractedPath = fullPath?.substring(index + 1);
+setProfileImage(`http://54.253.2.145:3000/${extractedPath}`)
+      }
   }
   if(isFocused){
     getLocalUser() 
@@ -84,17 +73,15 @@ useEffect(() => {
 },[isFocused])
   const toggleSwitch = () => {
     setIsEnabled(previousState => !previousState)
-    // console.log("topggle model is:#@#@#",isEnabled)
     if(isEnabled){ 
     handleUpdateProfile(false)
     }
     else {
-      console.log("topggle model is:#@#@#",isEnabled)
       setIsShownModel(true)
     }
   };
   const handleTopFive = () => {
-    if(sortedList.length > 5){
+    if(sortedList?.length > 5){
       const firstFiveElements = sortedList.slice(0, 5);
       setSortedList(firstFiveElements)
     }else{
@@ -102,7 +89,7 @@ useEffect(() => {
     }
   }
   const handleTopTen = () => {
-    if(sortedList.length > 10){
+    if(sortedList?.length > 10){
       const firstTenElements = sortedList.slice(0, 10);
       setSortedList(firstTenElements)
     }else{
@@ -110,7 +97,7 @@ useEffect(() => {
     }
   }
   const handleTopFifty = () => {
-    if(sortedList.length > 50){
+    if(sortedList?.length > 50){
       const firstFiftyElements = sortedList.slice(0, 50);
       setSortedList(firstFiftyElements)
     }else{
@@ -122,18 +109,13 @@ useEffect(() => {
     const formData = new FormData();
     formData.append('_id', storageUser?._id);
     formData.append('isToShowSteps', value); // Add user ID
-
-    console.log("params before update user api call:#@#2",formData,storageUser?._id)
    const userResponse = await UserUpdate(formData)
-  //  const userResponseData = JSON.parse(userResponse?.data)
-   console.log("data userResponseData is:",userResponse?._id)
    if(userResponse?._id){
     queryClient?.clear();
     const jsonValue = JSON.stringify(userResponse);
     setIsEnabled(userResponse?.isToShowSteps)
     await AsyncStorage.setItem("user", jsonValue);
     setStorageUser(userResponse)
-    // getAllUserSteps()
     setIsLoading(false)
    }else{
     setIsLoading(false)
@@ -206,7 +188,7 @@ useEffect(() => {
       </TouchableOpacity>
       </View>
       <View style={styles.cardContainer}>
-      <Image source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxgFQlVJBpYP0nRIPs4LXLXr1bD4Dh78z8zeMgozATvpJTIPzQr4pOW00ziT85Zllip7s&usqp=CAU' }} style={styles.userImage} />
+      {imageProfile ? <Image source={{ uri: imageProfile }} style={styles.userImage} /> : <Image source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxgFQlVJBpYP0nRIPs4LXLXr1bD4Dh78z8zeMgozATvpJTIPzQr4pOW00ziT85Zllip7s&usqp=CAU' }} style={styles.userImage} />}
       <View style={styles.userInfo}>
         <View style={{
           display:'flex',
@@ -222,7 +204,7 @@ useEffect(() => {
         }}>
         <Text style={styles.userName}>MY STEPS</Text>
         </View>
-        <Text style={styles.userScore}>FootSteps: {currUserSteps ? currUserSteps : 0}</Text>
+        <Text style={styles.userScore}>FootSteps: {currUserSteps?.totalSteps ? currUserSteps?.totalSteps : 0}</Text>
       </View>
       {/* Add the Switch here */}
       <Switch
